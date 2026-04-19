@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Dashboard diari de SnapEat — controla els teus àpats amb indicadors de colors.">
+  <title>SnapEat — Avui</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/screens.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Salta al contingut principal</a>
+
+  <main id="main-content" class="container" role="main">
+    <header class="dashboard-header">
+      <p class="dashboard-date">Avui, <span id="today-day-name">dia</span></p>
+      <h1 class="dashboard-greeting">Com vas?</h1>
+    </header>
+
+    <section class="semafor" aria-labelledby="semafor-title">
+      <h2 id="semafor-title" class="visually-hidden">Indicadors nutricionals del dia</h2>
+      <div id="semafor" class="semafor">
+        <!-- Will be populated by dashboard.js on load -->
+      </div>
+    </section>
+
+    <aside id="suggeriment" class="banner" role="status" aria-live="polite">
+      <!-- Populated by JS with daily tip -->
+    </aside>
+
+    <section class="apats-section" aria-labelledby="apats-title">
+      <h2 id="apats-title">Àpats d'avui</h2>
+      <ul id="llista-apats" class="apats-list">
+        <!-- Populated by JS. Include an empty-state template as template element: -->
+      </ul>
+      <template id="empty-state-template">
+        <li class="apat-empty">
+          <p>Encara no has registrat cap àpat avui.</p>
+          <p class="apat-empty__hint">Fes la primera foto amb el botó <strong>+</strong></p>
+        </li>
+      </template>
+    </section>
+  </main>
+
+  <nav class="tab-bar" aria-label="Navegació principal">
+    <a href="index.html" class="tab" aria-current="page">
+      <svg xmlns="http://www.w3.org/2000/svg" class="tab__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="tab__label">Avui</span>
+    </a>
+    <a href="setmana.html" class="tab">
+      <svg xmlns="http://www.w3.org/2000/svg" class="tab__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+      <span class="tab__label">La meva setmana</span>
+    </a>
+    <a href="perfil.html" class="tab">
+      <svg xmlns="http://www.w3.org/2000/svg" class="tab__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span class="tab__label">Perfil</span>
+    </a>
+  </nav>
+
+  <a href="registrar.html" class="fab" aria-label="Registrar nou àpat">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+  </a>
+
+  <script src="js/data.js"></script>
+  <script src="js/shared.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

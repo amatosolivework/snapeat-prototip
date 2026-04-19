@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Preferències i configuració de SnapEat.">
+  <title>SnapEat — Perfil</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/screens.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Salta al contingut principal</a>
+
+  <main id="main-content" class="container" role="main">
+    <header class="perfil-header">
+      <h1>Perfil</h1>
+    </header>
+
+    <section class="setmana-section" aria-labelledby="prefs-title">
+      <h2 id="prefs-title">Preferències alimentàries</h2>
+      <fieldset>
+        <legend class="visually-hidden">Restriccions</legend>
+        <label class="checkbox-label"><input type="checkbox" id="pref-vegetaria"> Vegetarià/ana</label>
+        <label class="checkbox-label"><input type="checkbox" id="pref-sense-gluten"> Sense gluten</label>
+        <label class="checkbox-label"><input type="checkbox" id="pref-sense-lactosa"> Sense lactosa</label>
+      </fieldset>
+    </section>
+
+    <section class="setmana-section" aria-labelledby="budget-default-title">
+      <h2 id="budget-default-title">Pressupost per defecte</h2>
+      <div class="input-with-suffix">
+        <input type="number" id="default-budget" class="input-field" value="30" min="10" max="200">
+        <span class="input-suffix" aria-hidden="true">€ / setmana</span>
+      </div>
+    </section>
+
+    <section class="setmana-section" aria-labelledby="info-title">
+      <h2 id="info-title">Sobre SnapEat</h2>
+      <p>Prototip desenvolupat pel Grup B3 dins l'assignatura Factors Humans i Computació (UB, 25-26).</p>
+    </section>
+  </main>
+
+  <nav class="tab-bar" aria-label="Navegació principal">
+    <a href="index.html" class="tab">
+      <svg xmlns="http://www.w3.org/2000/svg" class="tab__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="tab__label">Avui</span>
+    </a>
+    <a href="setmana.html" class="tab">
+      <svg xmlns="http://www.w3.org/2000/svg" class="tab__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+      <span class="tab__label">La meva setmana</span>
+    </a>
+    <a href="perfil.html" class="tab" aria-current="page">
+      <svg xmlns="http://www.w3.org/2000/svg" class="tab__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span class="tab__label">Perfil</span>
+    </a>
+  </nav>
+
+  <script src="js/data.js"></script>
+  <script src="js/shared.js"></script>
+  <script src="js/perfil.js"></script>
+</body>
+</html>

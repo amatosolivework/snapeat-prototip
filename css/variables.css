@@ -1,0 +1,123 @@
+/* ============================================================
+   SnapEat — Design tokens (custom properties)
+   Basat en disseny/guia-estil.md
+   ============================================================ */
+
+:root {
+  /* ------------------------------------------------------------
+     Colors — semàfor nutricional (Tailwind red/amber/emerald)
+     Cadascun amb variants: bg (fons), accent (dot/icon), fg (text)
+     ------------------------------------------------------------ */
+  --color-bad-bg: #FEE2E2;
+  --color-bad-accent: #DC2626;
+  --color-bad-fg: #991B1B;
+
+  --color-warn-bg: #FEF3C7;
+  --color-warn-accent: #D97706;
+  --color-warn-fg: #92400E;
+
+  --color-ok-bg: #D1FAE5;
+  --color-ok-accent: #059669;
+  --color-ok-fg: #065F46;
+
+  /* Color d'accent de marca */
+  --color-brand: #10B981;
+  --color-brand-hover: #059669;
+  --color-brand-soft: #ECFDF5;
+
+  /* Neutres */
+  --color-bg: #FAFAF9;
+  --color-surface: #FFFFFF;
+  --color-border: #E5E7EB;
+  --color-border-strong: #D1D5DB;
+  --color-text: #111827;
+  --color-text-muted: #4B5563;
+  --color-text-subtle: #6B7280;
+  --color-text-disabled: #9CA3AF;
+
+  /* Estats */
+  --color-focus: #2563EB;
+  --color-error: #DC2626;
+  --color-success: #059669;
+
+  /* ------------------------------------------------------------
+     Tipografia
+     ------------------------------------------------------------ */
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                 "Helvetica Neue", Arial, sans-serif;
+
+  --font-size-display: 2rem;      /* 32px */
+  --font-size-h1: 1.5rem;         /* 24px */
+  --font-size-h2: 1.25rem;        /* 20px */
+  --font-size-h3: 1.125rem;       /* 18px */
+  --font-size-body: 1rem;         /* 16px */
+  --font-size-small: 0.875rem;    /* 14px */
+  --font-size-micro: 0.75rem;     /* 12px */
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --line-height-tight: 1.2;
+  --line-height-snug: 1.3;
+  --line-height-base: 1.5;
+
+  /* ------------------------------------------------------------
+     Espaiat (base 4px)
+     ------------------------------------------------------------ */
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.5rem;   /* 24px */
+  --space-6: 2rem;     /* 32px */
+  --space-7: 3rem;     /* 48px */
+  --space-8: 4rem;     /* 64px */
+
+  /* ------------------------------------------------------------
+     Radius
+     ------------------------------------------------------------ */
+  --radius-sm: 0.5rem;    /* 8px */
+  --radius-md: 0.75rem;   /* 12px */
+  --radius-lg: 1rem;      /* 16px */
+  --radius-full: 9999px;
+
+  /* ------------------------------------------------------------
+     Ombres
+     ------------------------------------------------------------ */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08),
+               0 2px 4px -2px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.10),
+               0 4px 6px -4px rgba(0, 0, 0, 0.05);
+
+  /* ------------------------------------------------------------
+     Layout
+     ------------------------------------------------------------ */
+  --container-max-mobile: 100%;
+  --container-max-tablet: 480px;
+  --container-max-desktop: 560px;
+
+  --tab-bar-height: 64px;
+  --fab-size: 56px;
+  --touch-target-min: 44px;
+
+  /* ------------------------------------------------------------
+     Motion
+     ------------------------------------------------------------ */
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 300ms;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ------------------------------------------------------------
+     Z-index scale
+     ------------------------------------------------------------ */
+  --z-tab-bar: 10;
+  --z-fab: 20;
+  --z-modal: 100;
+  --z-toast: 200;
+}

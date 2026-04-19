@@ -1,0 +1,185 @@
+/* ============================================================
+   SnapEat — Layout
+   Contenidors, retícula responsive, safe-area insets
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   Contenidor principal — mobile-first
+   Breakpoints:
+     < 640px  → 100% amfada
+     ≥ 640px  → màx 480px (manté experiència mobile-like a tauleta)
+     ≥ 1024px → màx 560px (marge generós a desktop)
+   Padding bottom: espai per no quedar tapat pel tab bar + FAB
+   ------------------------------------------------------------ */
+.container {
+  width: 100%;
+  max-width: var(--container-max-mobile);
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+  /* Espai inferior: tab bar (64px) + FAB (56px) + respir (32px) */
+  padding-bottom: calc(var(--tab-bar-height) + var(--space-8));
+  padding-top: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: var(--container-max-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: var(--container-max-desktop);
+  }
+}
+
+/* ------------------------------------------------------------
+   Secció — bloc lògic dins d'una pantalla
+   Separació generosa entre seccions
+   ------------------------------------------------------------ */
+.section {
+  margin-bottom: var(--space-6);
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.section__title {
+  margin-bottom: var(--space-4);
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.section__subtitle {
+  margin-bottom: var(--space-3);
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+}
+
+/* ------------------------------------------------------------
+   Pantalla — contenidor de pantalla completa
+   ------------------------------------------------------------ */
+.screen {
+  min-height: 100vh;
+  padding-bottom: var(--tab-bar-height);
+}
+
+.screen__header {
+  margin-bottom: var(--space-5);
+}
+
+.screen__title {
+  font-size: var(--font-size-display);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text);
+}
+
+.screen__subtitle {
+  margin-top: var(--space-1);
+  font-size: var(--font-size-body);
+  color: var(--color-text-muted);
+}
+
+/* ------------------------------------------------------------
+   Utilitats flex i gap
+   ------------------------------------------------------------ */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.stack--tight {
+  gap: var(--space-2);
+}
+
+.stack--loose {
+  gap: var(--space-6);
+}
+
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.row--between {
+  justify-content: space-between;
+}
+
+/* ------------------------------------------------------------
+   Grid del semàfor nutricional
+   3 columnes iguals al mòbil; pot plegar-se a 2+1 si és molt estret
+   ------------------------------------------------------------ */
+.grid-semafor {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+/* A pantalles molt estretes (< 360px), plega a 2 columnes amb
+   la tercera ocupant tota l'amfada. Cas extrem però accessible. */
+@media (max-width: 359px) {
+  .grid-semafor {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grid-semafor > :nth-child(3) {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ------------------------------------------------------------
+   Grid de cards de pla setmanal
+   Mòbil: 1 columna; tauleta+: 2 columnes
+   ------------------------------------------------------------ */
+.grid-week {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .grid-week {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ------------------------------------------------------------
+   Safe area insets — iOS
+   Garanteix que el tab bar no quedi tapat pel home indicator
+   ------------------------------------------------------------ */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0);
+}
+
+/* ------------------------------------------------------------
+   Main — regió principal de contingut
+   ------------------------------------------------------------ */
+main {
+  display: block;
+}
+
+/* ------------------------------------------------------------
+   Utilitats d'espaiat (usades amb moderació — prefereix gap)
+   ------------------------------------------------------------ */
+.mt-4 { margin-top: var(--space-4); }
+.mt-5 { margin-top: var(--space-5); }
+.mt-6 { margin-top: var(--space-6); }
+.mb-4 { margin-bottom: var(--space-4); }
+.mb-5 { margin-bottom: var(--space-5); }
+.mb-6 { margin-bottom: var(--space-6); }

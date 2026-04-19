@@ -1,0 +1,580 @@
+/* ============================================================
+   SnapEat — Estils específics de pantalla
+   Dashboard, registrar, setmana, perfil
+   ============================================================ */
+
+/* ============================================================
+   #dashboard (index.html)
+   Semàfor al capdamunt, suggeriment, llista d'àpats, empty state
+   ============================================================ */
+
+#dashboard .dashboard__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+#dashboard .dashboard__salutacio {
+  font-size: var(--font-size-display);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+}
+
+#dashboard .dashboard__data {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+}
+
+/* Secció semàfor — destacat visual com a hero */
+#dashboard .dashboard__semafor {
+  margin-bottom: var(--space-5);
+}
+
+/* Secció banner de suggeriment */
+#dashboard .dashboard__suggeriment {
+  margin-bottom: var(--space-6);
+}
+
+/* Llista d'àpats del dia */
+#dashboard .dashboard__apats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+#dashboard .dashboard__apats-titol {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-3);
+}
+
+/* Empty state — quan no hi ha àpats registrats */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--space-3);
+  padding: var(--space-6) var(--space-4);
+  background-color: var(--color-surface);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+}
+
+.empty-state__icon {
+  width: 48px;
+  height: 48px;
+  color: var(--color-text-subtle);
+  stroke: currentColor;
+  fill: none;
+}
+
+.empty-state__title {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.empty-state__text {
+  font-size: var(--font-size-body);
+  color: var(--color-text-muted);
+  max-width: 28ch;
+}
+
+.empty-state__cta {
+  margin-top: var(--space-2);
+}
+
+/* ============================================================
+   #registrar-screen (registrar.html)
+   Foto area, detecció, extras, submit
+   ============================================================ */
+
+#registrar-screen .registrar__titol {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-4);
+}
+
+/* Zona de foto — aspecte 4:3, gran i central */
+#registrar-screen .foto-area {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background-color: var(--color-surface);
+  border: 2px dashed var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  color: var(--color-text-muted);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-in-out),
+              background-color var(--duration-fast) var(--ease-in-out);
+}
+
+#registrar-screen .foto-area:hover {
+  border-color: var(--color-brand);
+  background-color: var(--color-brand-soft);
+}
+
+#registrar-screen .foto-area--filled {
+  border-style: solid;
+  border-color: var(--color-brand);
+  padding: 0;
+}
+
+#registrar-screen .foto-area__icon {
+  width: 48px;
+  height: 48px;
+  color: var(--color-text-subtle);
+  stroke: currentColor;
+  fill: none;
+}
+
+#registrar-screen .foto-area__text {
+  font-size: var(--font-size-body);
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: 0 var(--space-4);
+}
+
+#registrar-screen .foto-area__preview {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Fila de detecció — mostra què s'ha reconegut a la foto */
+#registrar-screen .deteccio {
+  margin-top: var(--space-5);
+}
+
+#registrar-screen .deteccio__titol {
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-2);
+}
+
+#registrar-screen .deteccio__llista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* Fila d'extras (begudes, acompanyaments) amb chips */
+#registrar-screen .extras {
+  margin-top: var(--space-5);
+}
+
+#registrar-screen .extras__titol {
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-2);
+}
+
+#registrar-screen .extras__llista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* Botó de confirmació — a tota amfada, destacat */
+#registrar-screen .registrar__submit {
+  margin-top: var(--space-6);
+  width: 100%;
+}
+
+/* ============================================================
+   #setmana-screen (setmana.html)
+   Pressupost, menú generat, llista de compra, mode compra, resum
+   ============================================================ */
+
+#setmana-screen .setmana__titol {
+  font-size: var(--font-size-display);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--space-5);
+}
+
+/* -------------------- Secció: pressupost -------------------- */
+#setmana-screen .pressupost {
+  margin-bottom: var(--space-6);
+}
+
+#setmana-screen .pressupost__input {
+  /* Alineat amb euro al final — suffix via label o span */
+  max-width: 200px;
+}
+
+#setmana-screen .pressupost__hint {
+  font-size: var(--font-size-small);
+  color: var(--color-text-subtle);
+  margin-top: var(--space-1);
+}
+
+/* -------------------- Secció: menú generat -------------------- */
+#setmana-screen .menu-generat {
+  margin-bottom: var(--space-6);
+}
+
+#setmana-screen .menu-generat__titol {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-4);
+}
+
+/* Grid de cards de dies — 1 col mòbil, 2 col tauleta+ */
+#setmana-screen .menu-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  #setmana-screen .menu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Card de dia de la setmana */
+#setmana-screen .dia-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+#setmana-screen .dia-card__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+#setmana-screen .dia-card__nom {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+#setmana-screen .dia-card__preu {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+}
+
+#setmana-screen .dia-card__menjars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+#setmana-screen .dia-card__menjar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+  font-size: var(--font-size-body);
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-border);
+}
+
+#setmana-screen .dia-card__menjar:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+#setmana-screen .dia-card__tipus {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* -------------------- Secció: llista de compra -------------------- */
+#setmana-screen .compra {
+  margin-bottom: var(--space-6);
+}
+
+#setmana-screen .compra__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+#setmana-screen .compra__titol {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-semibold);
+}
+
+#setmana-screen .compra__total {
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-brand);
+}
+
+#setmana-screen .compra__llista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-2);
+}
+
+#setmana-screen .compra__item {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-3);
+  background-color: transparent;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--duration-fast) var(--ease-in-out);
+}
+
+#setmana-screen .compra__item:hover {
+  background-color: var(--color-bg);
+}
+
+#setmana-screen .compra__checkbox {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--color-brand);
+  cursor: pointer;
+}
+
+#setmana-screen .compra__nom {
+  font-size: var(--font-size-body);
+  color: var(--color-text);
+}
+
+#setmana-screen .compra__qty {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+}
+
+#setmana-screen .compra__preu {
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+}
+
+/* Ítem marcat com a comprat — text ratllat, opacitat reduïda */
+#setmana-screen .compra__item--done .compra__nom,
+#setmana-screen .compra__item--done .compra__qty,
+#setmana-screen .compra__item--done .compra__preu {
+  text-decoration: line-through;
+  color: var(--color-text-subtle);
+}
+
+#setmana-screen .compra__item--done {
+  opacity: 0.6;
+}
+
+/* -------------------- Mode compra (layout alternatiu) -------------------- */
+/* Quan s'activa mode compra, els ítems es fan més grans i tàctils */
+#setmana-screen .compra--mode-compra .compra__item {
+  padding: var(--space-4);
+  min-height: 56px;
+}
+
+#setmana-screen .compra--mode-compra .compra__checkbox {
+  width: 28px;
+  height: 28px;
+}
+
+#setmana-screen .compra--mode-compra .compra__nom {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-medium);
+}
+
+/* -------------------- Secció: resum final -------------------- */
+#setmana-screen .resum {
+  background-color: var(--color-brand-soft);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  text-align: center;
+}
+
+#setmana-screen .resum__titol {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin-bottom: var(--space-2);
+}
+
+#setmana-screen .resum__total {
+  font-size: var(--font-size-display);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-brand-hover);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--space-2);
+}
+
+#setmana-screen .resum__detall {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+}
+
+/* ============================================================
+   #perfil-screen (perfil.html)
+   Formulari senzill amb preferències
+   ============================================================ */
+
+#perfil-screen .perfil__titol {
+  font-size: var(--font-size-display);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-2);
+}
+
+#perfil-screen .perfil__subtitol {
+  font-size: var(--font-size-body);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-6);
+}
+
+/* Avatar + nom al capdamunt */
+#perfil-screen .perfil__identitat {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-6);
+}
+
+#perfil-screen .perfil__avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-brand-soft);
+  color: var(--color-brand);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-semibold);
+  flex-shrink: 0;
+}
+
+#perfil-screen .perfil__info {
+  min-width: 0;
+  flex: 1;
+}
+
+#perfil-screen .perfil__nom {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin-bottom: 2px;
+}
+
+#perfil-screen .perfil__email {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+}
+
+/* Formulari de preferències */
+#perfil-screen .perfil__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+#perfil-screen .perfil__seccio {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+#perfil-screen .perfil__seccio-titol {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin-bottom: var(--space-1);
+}
+
+#perfil-screen .perfil__seccio-descripcio {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-2);
+}
+
+/* Grup de chips per a preferències dietètiques */
+#perfil-screen .perfil__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* Toggle switch simple (usa input[type=checkbox] + label) */
+#perfil-screen .toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+#perfil-screen .toggle-row:last-child {
+  border-bottom: none;
+}
+
+#perfil-screen .toggle-row__label {
+  font-size: var(--font-size-body);
+  color: var(--color-text);
+  flex: 1;
+}
+
+#perfil-screen .toggle-row__hint {
+  display: block;
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+/* Botó de desar — al final del formulari */
+#perfil-screen .perfil__submit {
+  margin-top: var(--space-5);
+  width: 100%;
+}
+
+/* Enllaç de tancar sessió — al final, ghost danger */
+#perfil-screen .perfil__logout {
+  margin-top: var(--space-5);
+  width: 100%;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-small);
+  padding: var(--space-3);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+#perfil-screen .perfil__logout:hover {
+  color: var(--color-bad-accent);
+  text-decoration: underline;
+}

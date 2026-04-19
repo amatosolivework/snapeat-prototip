@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Registra un àpat amb una foto en menys de 30 segons.">
+  <title>SnapEat — Registrar àpat</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/screens.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Salta al contingut principal</a>
+
+  <main id="main-content" class="container" role="main">
+    <header class="registrar-header">
+      <button type="button" id="btn-cancelar" class="btn btn--ghost" aria-label="Cancel·lar i tornar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        Cancel·lar
+      </button>
+      <h1>Nou àpat</h1>
+    </header>
+
+    <form id="form-registrar" novalidate>
+      <section class="registrar-section">
+        <label for="photo-input" class="label">Fes una foto o tria'n una</label>
+        <div class="photo-area">
+          <input type="file" id="photo-input" accept="image/*" capture="environment" class="visually-hidden">
+          <label for="photo-input" class="photo-trigger" role="button" tabindex="0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+            <span>Toca per fer foto</span>
+          </label>
+          <img id="photo-preview" class="photo-preview hidden" alt="">
+        </div>
+      </section>
+
+      <section class="registrar-section">
+        <label for="detect-result" class="label">Això és el que he detectat:</label>
+        <input type="text" id="detect-result" class="input-field" placeholder="Pasta carbonara amb nata" aria-describedby="detect-hint">
+        <p id="detect-hint" class="hint">Pots editar-ho si no és exacte.</p>
+      </section>
+
+      <section class="registrar-section">
+        <fieldset>
+          <legend class="label">Vols afegir alguna cosa més?</legend>
+          <div id="extras-chips" class="chips">
+            <button type="button" class="chip" data-extra="Aigua">Aigua</button>
+            <button type="button" class="chip" data-extra="Coca-Cola">Coca-Cola</button>
+            <button type="button" class="chip" data-extra="Suc">Suc</button>
+            <button type="button" class="chip" data-extra="Pa">Pa</button>
+            <button type="button" class="chip" data-extra="Amanida">Amanida</button>
+            <button type="button" class="chip" data-extra="Iogurt">Iogurt</button>
+          </div>
+          <label for="extra-custom" class="label label--small">O escriu-ho tu:</label>
+          <input type="text" id="extra-custom" class="input-field" placeholder="Ex: poma, infusió, etc.">
+        </fieldset>
+      </section>
+
+      <div class="registrar-actions">
+        <button type="submit" id="btn-registrar" class="btn btn--primary btn--block">Registrar àpat</button>
+      </div>
+    </form>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/shared.js"></script>
+  <script src="js/registrar.js"></script>
+</body>
+</html>

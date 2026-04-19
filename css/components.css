@@ -1,0 +1,793 @@
+/* ============================================================
+   SnapEat — Components reutilitzables
+   Botons, cards, FAB, tab bar, inputs, semàfor, chips,
+   banners, apat-card, modals, skip-link
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   Skip link — accessibilitat (WCAG 2.4.1)
+   Visible només quan rep focus amb teclat
+   ------------------------------------------------------------ */
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-surface);
+  color: var(--color-brand);
+  font-weight: var(--font-weight-semibold);
+  border-radius: 0 0 var(--radius-md) 0;
+  box-shadow: var(--shadow-md);
+  /* Fora de pantalla per defecte; torna a la vista amb focus */
+  transform: translateY(-120%);
+  transition: transform var(--duration-base) var(--ease-out);
+  z-index: var(--z-modal);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.skip-link:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   BOTONS
+   Alçada mínima 44px (WCAG 2.5.5 Target Size AAA)
+   ============================================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--touch-target-min);
+  padding: var(--space-3) var(--space-5);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+  border-radius: var(--radius-md);
+  border: 2px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  transition: background-color var(--duration-fast) var(--ease-in-out),
+              border-color var(--duration-fast) var(--ease-in-out),
+              color var(--duration-fast) var(--ease-in-out),
+              transform var(--duration-fast) var(--ease-out),
+              opacity var(--duration-fast) var(--ease-in-out);
+}
+
+.btn:active:not(:disabled) {
+  /* Feedback tàctil subtil */
+  transform: scale(0.97);
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn--block {
+  width: 100%;
+}
+
+/* -------------------- Variant: primary -------------------- */
+.btn--primary {
+  background-color: var(--color-brand);
+  color: var(--color-surface);
+  border-color: var(--color-brand);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background-color: var(--color-brand-hover);
+  border-color: var(--color-brand-hover);
+}
+
+.btn--primary:active:not(:disabled) {
+  background-color: var(--color-brand-hover);
+}
+
+/* -------------------- Variant: secondary -------------------- */
+.btn--secondary {
+  background-color: transparent;
+  color: var(--color-brand);
+  border-color: var(--color-brand);
+}
+
+.btn--secondary:hover:not(:disabled) {
+  background-color: var(--color-brand-soft);
+}
+
+.btn--secondary:active:not(:disabled) {
+  background-color: var(--color-brand-soft);
+  color: var(--color-brand-hover);
+  border-color: var(--color-brand-hover);
+}
+
+/* -------------------- Variant: ghost -------------------- */
+.btn--ghost {
+  background-color: transparent;
+  color: var(--color-text-muted);
+  border-color: transparent;
+}
+
+.btn--ghost:hover:not(:disabled) {
+  background-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.btn--ghost:active:not(:disabled) {
+  background-color: var(--color-border-strong);
+}
+
+/* -------------------- Variant: danger -------------------- */
+.btn--danger {
+  background-color: transparent;
+  color: var(--color-bad-accent);
+  border-color: transparent;
+}
+
+.btn--danger:hover:not(:disabled) {
+  background-color: var(--color-bad-bg);
+}
+
+.btn--danger:active:not(:disabled) {
+  background-color: var(--color-bad-bg);
+  color: var(--color-bad-fg);
+}
+
+/* ============================================================
+   CARD — superfície bàsica per a contingut
+   ============================================================ */
+
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+}
+
+.card__title {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+  margin-bottom: var(--space-2);
+}
+
+.card__subtitle {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-3);
+}
+
+.card__body {
+  font-size: var(--font-size-body);
+  color: var(--color-text);
+}
+
+/* ============================================================
+   FAB — Floating Action Button
+   Posicionat sobre el tab bar, a baix a la dreta
+   ============================================================ */
+
+.fab {
+  position: fixed;
+  right: var(--space-4);
+  /* Sobre el tab bar + respir */
+  bottom: calc(var(--tab-bar-height) + var(--space-4) + env(safe-area-inset-bottom, 0px));
+  width: var(--fab-size);
+  height: var(--fab-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-brand);
+  color: var(--color-surface);
+  border: none;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-lg);
+  cursor: pointer;
+  z-index: var(--z-fab);
+  transition: background-color var(--duration-fast) var(--ease-in-out),
+              transform var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-in-out);
+}
+
+.fab:hover {
+  background-color: var(--color-brand-hover);
+  box-shadow: var(--shadow-lg), 0 0 0 6px var(--color-brand-soft);
+}
+
+.fab:active {
+  /* Feedback més marcat que un botó normal (element de flotació) */
+  transform: scale(0.93);
+}
+
+.fab svg,
+.fab__icon {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* ============================================================
+   TAB BAR — barra de navegació fixa inferior
+   ============================================================ */
+
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: stretch;
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  /* Safe area iOS — afegeix padding al padding propi */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  min-height: var(--tab-bar-height);
+  z-index: var(--z-tab-bar);
+}
+
+.tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  min-height: var(--tab-bar-height);
+  padding: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-micro);
+  font-weight: var(--font-weight-regular);
+  text-decoration: none;
+  text-align: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-in-out);
+}
+
+.tab__icon {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  fill: none;
+}
+
+.tab__label {
+  font-size: var(--font-size-micro);
+  line-height: 1;
+}
+
+.tab:hover {
+  color: var(--color-text);
+}
+
+/* Tab actiu — usa aria-current="page" com a selector canònic */
+.tab[aria-current="page"],
+.tab--active {
+  color: var(--color-brand);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ============================================================
+   INPUTS — minimalista amb border-bottom
+   Label SEMPRE visible a sobre (WCAG 3.3.2)
+   ============================================================ */
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.label {
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-snug);
+}
+
+.label--required::after {
+  content: " *";
+  color: var(--color-error);
+}
+
+.input-field {
+  width: 100%;
+  min-height: 48px;
+  padding: var(--space-2) 0;
+  font-size: var(--font-size-body);
+  color: var(--color-text);
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid var(--color-border);
+  border-radius: 0;
+  transition: border-color var(--duration-fast) var(--ease-in-out);
+}
+
+.input-field::placeholder {
+  color: var(--color-text-subtle);
+}
+
+.input-field:hover {
+  border-bottom-color: var(--color-border-strong);
+}
+
+.input-field:focus {
+  outline: none;
+  border-bottom-color: var(--color-brand);
+}
+
+.input-field:focus-visible {
+  /* Manté el focus ring global però també reforça el border bottom */
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-bottom-color: var(--color-brand);
+}
+
+.input-field:disabled {
+  color: var(--color-text-disabled);
+  border-bottom-color: var(--color-border);
+  cursor: not-allowed;
+}
+
+.input-field--error {
+  border-bottom-color: var(--color-error);
+}
+
+.input-help {
+  font-size: var(--font-size-small);
+  color: var(--color-text-subtle);
+  margin-top: var(--space-1);
+}
+
+.input-error {
+  font-size: var(--font-size-small);
+  color: var(--color-error);
+  margin-top: var(--space-1);
+}
+
+/* Select amb la mateixa aparença que input */
+select.input-field {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--color-text-muted) 50%),
+                    linear-gradient(-45deg, transparent 50%, var(--color-text-muted) 50%);
+  background-position: calc(100% - 14px) 50%, calc(100% - 8px) 50%;
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: var(--space-6);
+}
+
+/* ============================================================
+   SEMÀFOR NUTRICIONAL — component crític
+   Cada cèl·lula combina color + icona + text (anti-daltonisme)
+   ============================================================ */
+
+.semafor {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+@media (max-width: 359px) {
+  .semafor {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .semafor > :nth-child(3) {
+    grid-column: 1 / -1;
+  }
+}
+
+.semafor-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--space-1);
+  min-height: 96px;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  /* Transició per al canvi d'estat després de registrar un àpat */
+  transition: background-color var(--duration-slow) var(--ease-in-out),
+              border-color var(--duration-slow) var(--ease-in-out),
+              transform var(--duration-slow) var(--ease-out);
+}
+
+.semafor-cell__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-bottom: var(--space-1);
+}
+
+.semafor-cell__icon svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+  fill: none;
+}
+
+.semafor-cell__dot {
+  /* Alternativa a icona si només es vol un punt de color */
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background-color: currentColor;
+  margin-bottom: var(--space-2);
+}
+
+.semafor-cell__label {
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.semafor-cell__status {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-snug);
+}
+
+/* -------------------- Modificador: OK -------------------- */
+.semafor-cell--ok {
+  background-color: var(--color-ok-bg);
+  border-color: rgba(5, 150, 105, 0.4); /* --color-ok-accent a 40% */
+  color: var(--color-ok-accent);
+}
+
+.semafor-cell--ok .semafor-cell__label {
+  color: var(--color-ok-fg);
+}
+
+.semafor-cell--ok .semafor-cell__status {
+  color: var(--color-ok-fg);
+}
+
+/* -------------------- Modificador: warn -------------------- */
+.semafor-cell--warn {
+  background-color: var(--color-warn-bg);
+  border-color: rgba(217, 119, 6, 0.4); /* --color-warn-accent a 40% */
+  color: var(--color-warn-accent);
+}
+
+.semafor-cell--warn .semafor-cell__label {
+  color: var(--color-warn-fg);
+}
+
+.semafor-cell--warn .semafor-cell__status {
+  color: var(--color-warn-fg);
+}
+
+/* -------------------- Modificador: bad -------------------- */
+.semafor-cell--bad {
+  background-color: var(--color-bad-bg);
+  border-color: rgba(220, 38, 38, 0.4); /* --color-bad-accent a 40% */
+  color: var(--color-bad-accent);
+}
+
+.semafor-cell--bad .semafor-cell__label {
+  color: var(--color-bad-fg);
+}
+
+.semafor-cell--bad .semafor-cell__status {
+  color: var(--color-bad-fg);
+}
+
+/* Animació d'atenció en primer render post-registre */
+.semafor-cell--pulse {
+  animation: semafor-pulse var(--duration-slow) var(--ease-out);
+}
+
+@keyframes semafor-pulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* ============================================================
+   CHIPS — selecció ràpida (begudes, extras)
+   ============================================================ */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: 36px;
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--color-bg);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color var(--duration-fast) var(--ease-in-out),
+              border-color var(--duration-fast) var(--ease-in-out),
+              color var(--duration-fast) var(--ease-in-out);
+}
+
+.chip:hover {
+  border-color: var(--color-border-strong);
+  color: var(--color-text);
+}
+
+.chip:active {
+  transform: scale(0.97);
+}
+
+/* Estat seleccionat — input:checked + label o classe .chip--selected */
+.chip--selected,
+.chip[aria-pressed="true"] {
+  background-color: var(--color-brand-soft);
+  border-color: var(--color-brand);
+  color: var(--color-brand-hover);
+}
+
+.chip--selected:hover,
+.chip[aria-pressed="true"]:hover {
+  background-color: var(--color-brand-soft);
+  border-color: var(--color-brand-hover);
+}
+
+.chip__icon {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* ============================================================
+   BANNER — suggeriments tonals Coach
+   ============================================================ */
+
+.banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-brand-soft);
+  border-left: 3px solid var(--color-brand);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-base);
+}
+
+.banner__icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px; /* alineació òptica amb la primera línia de text */
+  color: var(--color-brand);
+  stroke: currentColor;
+  fill: none;
+}
+
+.banner__text {
+  flex: 1;
+}
+
+.banner__text strong {
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Variant info neutra (no coach) */
+.banner--info {
+  background-color: var(--color-bg);
+  border-left-color: var(--color-text-muted);
+}
+
+.banner--info .banner__icon {
+  color: var(--color-text-muted);
+}
+
+/* ============================================================
+   APAT-CARD — card específica per a un àpat registrat
+   Conté foto thumbnail, nom, hora i menú [⋯]
+   ============================================================ */
+
+.apat-card {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-3);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.apat-card__foto {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-bg);
+}
+
+.apat-card__body {
+  min-width: 0; /* permet truncat del text */
+}
+
+.apat-card__nom {
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  line-height: var(--line-height-snug);
+  /* Truncat a una línia si és massa llarg */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.apat-card__hora {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+.apat-card__menu {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--touch-target-min);
+  height: var(--touch-target-min);
+  border-radius: var(--radius-full);
+  color: var(--color-text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-in-out),
+              color var(--duration-fast) var(--ease-in-out);
+}
+
+.apat-card__menu:hover {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+.apat-card__menu svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* ============================================================
+   MODAL — overlay centrat per a confirmacions
+   ============================================================ */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  background-color: rgba(17, 24, 39, 0.5); /* --color-text a 50% */
+  z-index: var(--z-modal);
+  /* Hidden per defecte — JS afegirà atribut open o classe .modal--visible */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--duration-base) var(--ease-in-out),
+              visibility var(--duration-base) var(--ease-in-out);
+}
+
+.modal[open],
+.modal--visible,
+.modal:not([hidden]) {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal__dialog {
+  width: 100%;
+  max-width: 400px;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  /* Animació d'entrada */
+  transform: translateY(8px) scale(0.98);
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.modal[open] .modal__dialog,
+.modal--visible .modal__dialog {
+  transform: translateY(0) scale(1);
+}
+
+.modal__title {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+  color: var(--color-text);
+}
+
+.modal__body {
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-base);
+  color: var(--color-text-muted);
+}
+
+.modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+/* En mòbils petits, botons a tota amfada apilats */
+@media (max-width: 479px) {
+  .modal__actions {
+    flex-direction: column-reverse;
+  }
+  .modal__actions .btn {
+    width: 100%;
+  }
+}
+
+/* ============================================================
+   BADGE — petita etiqueta d'estat
+   ============================================================ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-2);
+  font-size: var(--font-size-micro);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  background-color: var(--color-bg);
+  color: var(--color-text-muted);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+.badge--ok {
+  background-color: var(--color-ok-bg);
+  color: var(--color-ok-fg);
+  border-color: transparent;
+}
+
+.badge--warn {
+  background-color: var(--color-warn-bg);
+  color: var(--color-warn-fg);
+  border-color: transparent;
+}
+
+.badge--bad {
+  background-color: var(--color-bad-bg);
+  color: var(--color-bad-fg);
+  border-color: transparent;
+}
+
+/* ============================================================
+   DIVIDER — separador horitzontal
+   ============================================================ */
+
+.divider {
+  height: 1px;
+  background-color: var(--color-border);
+  border: none;
+  margin: var(--space-4) 0;
+}
