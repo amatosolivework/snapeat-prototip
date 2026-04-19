@@ -5,8 +5,6 @@
 
 /* ------------------------------------------------------------
    Reset — box-sizing universal i margins a zero
-   Raó: evitar inconsistències entre navegadors i facilitar
-   el càlcul de mides dels components
    ------------------------------------------------------------ */
 *,
 *::before,
@@ -28,7 +26,8 @@ blockquote,
 dl,
 dd,
 ul,
-ol {
+ol,
+fieldset {
   margin: 0;
   padding: 0;
 }
@@ -36,6 +35,17 @@ ol {
 ul,
 ol {
   list-style: none;
+}
+
+/* Reset de fieldset — elimina border/padding que poden causar layouts inesperats */
+fieldset {
+  border: none;
+  min-width: 0;
+}
+
+legend {
+  padding: 0;
+  display: contents; /* Per defecte es comporta com un label; evitem offsets del navegador */
 }
 
 button {
@@ -73,17 +83,21 @@ body {
   /* Millora la renderització a Mac/iOS */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern", "liga", "clig", "calt";
   /* Mínim 100vh per garantir que el fons cobreix tota la pantalla */
   min-height: 100vh;
 }
 
 /* ------------------------------------------------------------
    Tipografia — capçaleres (segueix l'escala de variables.css)
+   Tracking lleugerament negatiu per titulars més elegants
    ------------------------------------------------------------ */
 h1 {
   font-size: var(--font-size-h1);
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-snug);
+  letter-spacing: var(--tracking-tight);
   color: var(--color-text);
 }
 
@@ -91,6 +105,7 @@ h2 {
   font-size: var(--font-size-h2);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
+  letter-spacing: var(--tracking-tight);
   color: var(--color-text);
 }
 
@@ -112,12 +127,15 @@ small {
   color: var(--color-text-muted);
 }
 
+strong {
+  font-weight: var(--font-weight-semibold);
+}
+
 /* ------------------------------------------------------------
-   Enllaços — color de marca, subratllat només a hover
-   Raó: aspecte net; el focus-visible ja indica interactivitat
+   Enllaços
    ------------------------------------------------------------ */
 a {
-  color: var(--color-brand);
+  color: var(--color-brand-hover);
   text-decoration: none;
   transition: color var(--duration-fast) var(--ease-in-out);
 }
@@ -127,7 +145,7 @@ a:hover {
 }
 
 a:active {
-  color: var(--color-brand-hover);
+  color: var(--color-brand-dark);
 }
 
 /* ------------------------------------------------------------
@@ -144,8 +162,6 @@ video {
 
 /* ------------------------------------------------------------
    Focus visible global — WCAG 2.4.7
-   Outline blau de 2px amb offset per garantir visibilitat
-   sobre qualsevol fons de la paleta
    ------------------------------------------------------------ */
 :focus {
   outline: none;
@@ -159,7 +175,6 @@ video {
 
 /* ------------------------------------------------------------
    Utilitat visually-hidden — contingut només per lectors de pantalla
-   Patró estàndard de Bootstrap/WAI
    ------------------------------------------------------------ */
 .visually-hidden {
   position: absolute;
@@ -173,18 +188,31 @@ video {
   border: 0;
 }
 
+/* Element amagat via classe ".hidden" (utilitzat pel preview de foto) */
+.hidden {
+  display: none !important;
+}
+
 /* ------------------------------------------------------------
-   Selecció de text — utilitza el color de marca suau
+   Utilitat "hint" — text d'ajuda petit sota inputs i títols
+   ------------------------------------------------------------ */
+.hint {
+  font-size: var(--font-size-small);
+  color: var(--color-text-subtle);
+  line-height: var(--line-height-snug);
+  margin: 0;
+}
+
+/* ------------------------------------------------------------
+   Selecció de text
    ------------------------------------------------------------ */
 ::selection {
   background-color: var(--color-brand-soft);
-  color: var(--color-text);
+  color: var(--color-brand-dark);
 }
 
 /* ------------------------------------------------------------
    Preferència de moviment reduït — WCAG 2.3.3
-   Única excepció a la regla de no usar !important:
-   ha d'anul·lar qualsevol transició/animació del projecte
    ------------------------------------------------------------ */
 @media (prefers-reduced-motion: reduce) {
   *,

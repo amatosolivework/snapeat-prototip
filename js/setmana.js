@@ -255,6 +255,15 @@
     }
   }
 
+  // Emoji per a cada categoria de compra — reforç visual ràpid al súper.
+  const CATEGORY_ICON = {
+    'Verdures': '🥬',
+    'Proteïna': '🍗',
+    'Llet i derivats': '🥛',
+    'Bàsics': '🌾',
+    'Altres': '🛒'
+  };
+
   function renderShoppingList(list) {
     if (!refs.llistaCompra) return;
     showSection(refs.sectLlista);
@@ -265,10 +274,11 @@
     const html = categoriesOrder
       .filter(function (cat) { return groups[cat] && groups[cat].length; })
       .map(function (cat) {
+        const icon = CATEGORY_ICON[cat] || '🛒';
         return '' +
           '<div class="shopping-group">' +
-            '<h3 class="shopping-group__title" style="font-size:16px;font-weight:600;margin:12px 0 6px;">' + escapeHtml(cat) + '</h3>' +
-            '<ul class="shopping-group__list" style="list-style:none;padding:0;margin:0;">' +
+            '<h3 class="shopping-group__title"><span class="shopping-group__icon" aria-hidden="true">' + icon + '</span>' + escapeHtml(cat) + '</h3>' +
+            '<ul class="shopping-group__list">' +
               groups[cat].map(shoppingRowHtml).join('') +
             '</ul>' +
           '</div>';
@@ -289,9 +299,9 @@
 
   function shoppingRowHtml(item) {
     return '' +
-      '<li data-id="' + escapeAttr(item.id) + '" style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #E5E7EB;">' +
+      '<li data-id="' + escapeAttr(item.id) + '">' +
         '<span>' + escapeHtml(item.nom + ' — ' + item.quantitat) + '</span>' +
-        '<span style="color:#6B7280;font-size:14px;">' + escapeHtml(formatPrice(item.preuAprox)) + '</span>' +
+        '<span style="color:var(--color-text-muted);font-size:var(--font-size-small);font-weight:var(--font-weight-medium);">' + escapeHtml(formatPrice(item.preuAprox)) + '</span>' +
       '</li>';
   }
 
@@ -323,15 +333,15 @@
   function compraItemHtml(item) {
     const comprat = !!item.comprat;
     return '' +
-      '<article class="compra-item" data-id="' + escapeAttr(item.id) + '" style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #E5E7EB;border-radius:12px;margin-bottom:8px;background:' + (comprat ? '#ECFDF5' : '#fff') + ';">' +
-        '<button type="button" class="compra-item__check" data-action="toggle" data-id="' + escapeAttr(item.id) + '" aria-pressed="' + (comprat ? 'true' : 'false') + '" aria-label="' + escapeAttr((comprat ? 'Desmarcar' : 'Marcar') + ' com a comprat: ' + item.nom) + '" style="min-width:44px;min-height:44px;border-radius:9999px;border:2px solid ' + (comprat ? '#059669' : '#D1D5DB') + ';background:' + (comprat ? '#059669' : '#fff') + ';color:' + (comprat ? '#fff' : '#9CA3AF') + ';display:flex;align-items:center;justify-content:center;font-size:20px;">' +
+      '<article class="compra-item" data-id="' + escapeAttr(item.id) + '" data-comprat="' + (comprat ? 'true' : 'false') + '">' +
+        '<button type="button" class="compra-item__check" data-action="toggle" data-id="' + escapeAttr(item.id) + '" aria-pressed="' + (comprat ? 'true' : 'false') + '" aria-label="' + escapeAttr((comprat ? 'Desmarcar' : 'Marcar') + ' com a comprat: ' + item.nom) + '" style="min-width:44px;min-height:44px;border-radius:9999px;border:2px solid ' + (comprat ? 'var(--color-brand)' : 'var(--color-border-strong)') + ';background:' + (comprat ? 'var(--color-brand)' : 'var(--color-surface)') + ';color:' + (comprat ? '#fff' : 'var(--color-text-subtle)') + ';display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;cursor:pointer;transition:all 0.15s;">' +
           (comprat ? '✓' : '') +
         '</button>' +
-        '<div class="compra-item__body" style="flex:1;">' +
-          '<p class="compra-item__nom" style="font-weight:600;margin:0;' + (comprat ? 'text-decoration:line-through;color:#6B7280;' : '') + '">' + escapeHtml(item.nom) + '</p>' +
-          '<p class="compra-item__meta" style="margin:0;color:#6B7280;font-size:14px;">' + escapeHtml(item.quantitat + ' · ' + formatPrice(item.preuAprox)) + '</p>' +
+        '<div class="compra-item__body" style="flex:1;min-width:0;">' +
+          '<p class="compra-item__nom" style="font-weight:var(--font-weight-semibold);margin:0;font-size:var(--font-size-body);' + (comprat ? 'text-decoration:line-through;color:var(--color-text-muted);' : 'color:var(--color-text);') + '">' + escapeHtml(item.nom) + '</p>' +
+          '<p class="compra-item__meta" style="margin:2px 0 0;color:var(--color-text-muted);font-size:var(--font-size-small);">' + escapeHtml(item.quantitat + ' · ' + formatPrice(item.preuAprox)) + '</p>' +
         '</div>' +
-        '<button type="button" class="btn btn--ghost" data-action="alternativa" data-id="' + escapeAttr(item.id) + '" aria-label="Buscar alternativa a ' + escapeAttr(item.nom) + '" style="font-size:14px;">' +
+        '<button type="button" class="btn btn--ghost" data-action="alternativa" data-id="' + escapeAttr(item.id) + '" aria-label="Buscar alternativa a ' + escapeAttr(item.nom) + '" style="font-size:var(--font-size-small);">' +
           'Alternativa' +
         '</button>' +
       '</article>';

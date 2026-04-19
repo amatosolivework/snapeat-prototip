@@ -5,37 +5,33 @@
 
 /* ------------------------------------------------------------
    Contenidor principal — mobile-first
-   Breakpoints:
-     < 640px  → 100% amfada
-     ≥ 640px  → màx 480px (manté experiència mobile-like a tauleta)
-     ≥ 1024px → màx 560px (marge generós a desktop)
-   Padding bottom: espai per no quedar tapat pel tab bar + FAB
    ------------------------------------------------------------ */
 .container {
   width: 100%;
   max-width: var(--container-max-mobile);
   margin-inline: auto;
-  padding-inline: var(--space-4);
-  /* Espai inferior: tab bar (64px) + FAB (56px) + respir (32px) */
-  padding-bottom: calc(var(--tab-bar-height) + var(--space-8));
-  padding-top: var(--space-4);
+  padding-inline: var(--space-5);
+  /* Marge inferior generós: tab bar (72px) + fab (60px) + respir extra (48px) */
+  padding-bottom: calc(var(--tab-bar-height) + var(--fab-size) + var(--space-5));
+  padding-top: var(--space-5);
 }
 
 @media (min-width: 640px) {
   .container {
     max-width: var(--container-max-tablet);
+    padding-inline: var(--space-5);
   }
 }
 
 @media (min-width: 1024px) {
   .container {
     max-width: var(--container-max-desktop);
+    padding-top: var(--space-6);
   }
 }
 
 /* ------------------------------------------------------------
    Secció — bloc lògic dins d'una pantalla
-   Separació generosa entre seccions
    ------------------------------------------------------------ */
 .section {
   margin-bottom: var(--space-6);
@@ -46,14 +42,15 @@
 }
 
 .section__title {
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-3);
   font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-tight);
   line-height: var(--line-height-snug);
 }
 
 .section__subtitle {
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
   font-size: var(--font-size-small);
   color: var(--color-text-muted);
 }
@@ -73,14 +70,16 @@
 .screen__title {
   font-size: var(--font-size-display);
   font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-tight);
   line-height: var(--line-height-tight);
   color: var(--color-text);
 }
 
 .screen__subtitle {
-  margin-top: var(--space-1);
+  margin-top: var(--space-2);
   font-size: var(--font-size-body);
   color: var(--color-text-muted);
+  line-height: var(--line-height-snug);
 }
 
 /* ------------------------------------------------------------
@@ -118,22 +117,18 @@
 }
 
 /* ------------------------------------------------------------
-   Grid del semàfor nutricional
-   3 columnes iguals al mòbil; pot plegar-se a 2+1 si és molt estret
+   Grid del semàfor nutricional (duplicada a components.css)
    ------------------------------------------------------------ */
 .grid-semafor {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--space-3);
 }
 
-/* A pantalles molt estretes (< 360px), plega a 2 columnes amb
-   la tercera ocupant tota l'amfada. Cas extrem però accessible. */
 @media (max-width: 359px) {
   .grid-semafor {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, 1fr);
   }
-
   .grid-semafor > :nth-child(3) {
     grid-column: 1 / -1;
   }
@@ -141,7 +136,6 @@
 
 /* ------------------------------------------------------------
    Grid de cards de pla setmanal
-   Mòbil: 1 columna; tauleta+: 2 columnes
    ------------------------------------------------------------ */
 .grid-week {
   display: grid;
@@ -157,7 +151,6 @@
 
 /* ------------------------------------------------------------
    Safe area insets — iOS
-   Garanteix que el tab bar no quedi tapat pel home indicator
    ------------------------------------------------------------ */
 .safe-bottom {
   padding-bottom: env(safe-area-inset-bottom, 0);
@@ -167,19 +160,20 @@
   padding-top: env(safe-area-inset-top, 0);
 }
 
-/* ------------------------------------------------------------
-   Main — regió principal de contingut
-   ------------------------------------------------------------ */
 main {
   display: block;
 }
 
 /* ------------------------------------------------------------
-   Utilitats d'espaiat (usades amb moderació — prefereix gap)
+   Utilitats d'espaiat (usades amb moderació)
    ------------------------------------------------------------ */
+.mt-2 { margin-top: var(--space-2); }
+.mt-3 { margin-top: var(--space-3); }
 .mt-4 { margin-top: var(--space-4); }
 .mt-5 { margin-top: var(--space-5); }
 .mt-6 { margin-top: var(--space-6); }
+.mb-2 { margin-bottom: var(--space-2); }
+.mb-3 { margin-bottom: var(--space-3); }
 .mb-4 { margin-bottom: var(--space-4); }
 .mb-5 { margin-bottom: var(--space-5); }
 .mb-6 { margin-bottom: var(--space-6); }

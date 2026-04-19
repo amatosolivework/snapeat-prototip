@@ -20,20 +20,26 @@
   --color-ok-accent: #059669;
   --color-ok-fg: #065F46;
 
-  /* Color d'accent de marca */
+  /* Color d'accent de marca — verd càlid, no agressiu */
   --color-brand: #10B981;
   --color-brand-hover: #059669;
   --color-brand-soft: #ECFDF5;
+  --color-brand-dark: #047857;
+
+  /* Segon accent càlid — s'usa a il·lustracions i detalls */
+  --color-accent-warm: #F59E0B;
+  --color-accent-warm-soft: #FEF3C7;
 
   /* Neutres */
   --color-bg: #FAFAF9;
   --color-surface: #FFFFFF;
-  --color-border: #E5E7EB;
-  --color-border-strong: #D1D5DB;
-  --color-text: #111827;
-  --color-text-muted: #4B5563;
-  --color-text-subtle: #6B7280;
-  --color-text-disabled: #9CA3AF;
+  --color-surface-subtle: #F5F5F4;
+  --color-border: #E7E5E4;
+  --color-border-strong: #D6D3D1;
+  --color-text: #1C1917;
+  --color-text-muted: #44403C;
+  --color-text-subtle: #78716C;
+  --color-text-disabled: #A8A29E;
 
   /* Estats */
   --color-focus: #2563EB;
@@ -41,9 +47,17 @@
   --color-success: #059669;
 
   /* ------------------------------------------------------------
+     Gradients — per aportar caliu sense desordre
+     ------------------------------------------------------------ */
+  --gradient-brand: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  --gradient-hero: linear-gradient(135deg, #ECFDF5 0%, #FEF3C7 100%);
+  --gradient-warm: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+  --gradient-fresh: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+
+  /* ------------------------------------------------------------
      Tipografia
      ------------------------------------------------------------ */
-  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  --font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto,
                  "Helvetica Neue", Arial, sans-serif;
 
   --font-size-display: 2rem;      /* 32px */
@@ -59,9 +73,14 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
-  --line-height-tight: 1.2;
+  --line-height-tight: 1.15;
   --line-height-snug: 1.3;
   --line-height-base: 1.5;
+
+  /* Espaiat entre lletres — petites afinacions per tipografia natural */
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.04em;
 
   /* ------------------------------------------------------------
      Espaiat (base 4px)
@@ -79,18 +98,26 @@
      Radius
      ------------------------------------------------------------ */
   --radius-sm: 0.5rem;    /* 8px */
-  --radius-md: 0.75rem;   /* 12px */
-  --radius-lg: 1rem;      /* 16px */
+  --radius-md: 0.875rem;  /* 14px — una mica més arrodonit, més amigable */
+  --radius-lg: 1.25rem;   /* 20px */
+  --radius-xl: 1.75rem;   /* 28px */
   --radius-full: 9999px;
 
   /* ------------------------------------------------------------
-     Ombres
+     Ombres — suaus i càlides, mai dures
      ------------------------------------------------------------ */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08),
-               0 2px 4px -2px rgba(0, 0, 0, 0.04);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.10),
-               0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 2px rgba(28, 25, 23, 0.04),
+               0 1px 3px rgba(28, 25, 23, 0.06);
+  --shadow-md: 0 4px 8px -2px rgba(28, 25, 23, 0.06),
+               0 2px 4px -2px rgba(28, 25, 23, 0.04);
+  --shadow-lg: 0 12px 24px -6px rgba(28, 25, 23, 0.10),
+               0 4px 10px -4px rgba(28, 25, 23, 0.06);
+  --shadow-xl: 0 20px 40px -10px rgba(28, 25, 23, 0.15),
+               0 8px 16px -6px rgba(28, 25, 23, 0.08);
+
+  /* Ombres de marca — glow verd subtil per al FAB */
+  --shadow-brand: 0 10px 25px -8px rgba(16, 185, 129, 0.45),
+                  0 4px 10px -4px rgba(16, 185, 129, 0.30);
 
   /* ------------------------------------------------------------
      Layout
@@ -99,19 +126,20 @@
   --container-max-tablet: 480px;
   --container-max-desktop: 560px;
 
-  --tab-bar-height: 64px;
-  --fab-size: 56px;
+  --tab-bar-height: 72px;
+  --fab-size: 60px;
   --touch-target-min: 44px;
 
   /* ------------------------------------------------------------
      Motion
      ------------------------------------------------------------ */
   --duration-fast: 150ms;
-  --duration-base: 200ms;
-  --duration-slow: 300ms;
+  --duration-base: 220ms;
+  --duration-slow: 320ms;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* ------------------------------------------------------------
      Z-index scale

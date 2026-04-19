@@ -742,6 +742,38 @@ window.SnapEat.data = (function () {
   }
 
   // ------------------------------
+  //  Mapping de fotos d'àpats
+  //  Atribueix una foto de /assets/photos/ segons paraules clau al nom.
+  //  Retorna null si no hi ha cap coincidència (el renderer mostrarà un placeholder
+  //  amb la inicial a sobre d'un gradient).
+  // ------------------------------
+
+  // NOTA: l'ordre importa — les regles més específiques van primer.
+  // Ex: "amanida de pollastre" ha de triar "amanida" abans que "pollastre".
+  const PHOTO_MAPPING = [
+    { keywords: ['amanida', 'ensalada', 'enciam'], file: 'amanida.jpg' },
+    { keywords: ['pasta', 'carbonara', 'macarrons', 'espagueti', 'tallarines'], file: 'pasta-carbonara.jpg' },
+    { keywords: ['arròs', 'arros', 'risotto', 'paella'], file: 'arros-verdures.jpg' },
+    { keywords: ['truita', 'tortilla'], file: 'truita-patates.jpg' },
+    { keywords: ['pollastre', 'chicken', 'gall dindi'], file: 'pollastre-patates.jpg' },
+    { keywords: ['vedella', 'carn', 'steak', 'filet', 'hamburguesa', 'llom', 'bistec'], file: 'vedella-pure.jpg' }
+  ];
+
+  function getMealPhoto(nom) {
+    if (!nom) return null;
+    const t = String(nom).toLowerCase();
+    for (let i = 0; i < PHOTO_MAPPING.length; i++) {
+      const entry = PHOTO_MAPPING[i];
+      for (let j = 0; j < entry.keywords.length; j++) {
+        if (t.indexOf(entry.keywords[j]) !== -1) {
+          return 'assets/photos/' + entry.file;
+        }
+      }
+    }
+    return null;
+  }
+
+  // ------------------------------
   //  Alternatives de productes
   // ------------------------------
 
@@ -834,6 +866,7 @@ window.SnapEat.data = (function () {
     getAlternatives: getAlternatives,
 
     getRecipes: getRecipes,
+    getMealPhoto: getMealPhoto,
 
     // Util de desenvolupament — neteja tot l'estat emmagatzemat.
     resetAll: function () {
