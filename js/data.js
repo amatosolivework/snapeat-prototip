@@ -728,8 +728,18 @@ window.SnapEat.data = (function () {
     }
   ];
 
+  // Les receptes del catàleg tenen preus pensats per a 2 porcions (habit casolà a
+  // Barcelona). Per mostrar-les a Laura, que cuina per a 1, escalem el preu de
+  // cada recepta. Els preus dels ingredients al shopping list NO s'escalen
+  // perquè al súper compres el producte sencer (pack de pasta, peça de formatge).
+  const PORTION_FACTOR = 0.65;
+
   function getRecipes() {
-    return RECIPES.slice();
+    return RECIPES.map(function (r) {
+      return Object.assign({}, r, {
+        preu_aprox: Math.round(r.preu_aprox * PORTION_FACTOR * 100) / 100
+      });
+    });
   }
 
   // Filtra receptes segons preferències de l'usuari.
@@ -840,57 +850,79 @@ window.SnapEat.data = (function () {
   function generateWeekPlan(budget, preferences) {
     const prefs = preferences || getPreferences();
     const budgetNum = Number(budget) || 30;
+    const targetPerMeal = budgetNum / 14; // 7 dinars + 7 sopars
 
-    // Filtrem segons preferències i determinem la franja de pressupost.
     let pool = filterRecipesByPrefs(getRecipes(), prefs);
-    if (!pool.length) pool = getRecipes(); // fallback
+    if (!pool.length) pool = getRecipes();
 
-    let bracket;
-    if (budgetNum < 25) bracket = 'baix';
-    else if (budgetNum <= 40) bracket = 'mitja';
-    else bracket = 'alt';
+    const bracket = budgetNum < 25 ? 'baix' : (budgetNum <= 40 ? 'mitja' : 'alt');
 
-    // Per pressupost baix, prioritzem receptes etiquetades 'economic'.
-    if (bracket === 'baix') {
-      const cheap = pool.filter((r) => r.etiquetes.indexOf('economic') !== -1);
-      if (cheap.length >= 4) pool = cheap;
-    } else if (bracket === 'alt') {
-      // Per pressupost alt, afegim receptes amb peix si hi caben.
-      // Ja estan al pool per defecte — no cal filtrar.
-    }
+    // Llistes per categoria, ordenades per PROXIMITAT al preu mitjà objectiu.
+    // Així, amb pressupost 30 €, el target és ~2,14 €/àpat, i prioritzem receptes
+    // al voltant d'aquell preu en lloc de rotar a cegues.
+    const byTargetProximity = function (a, b) {
+      return Math.abs(a.preu_aprox - targetPerMeal) - Math.abs(b.preu_aprox - targetPerMeal);
+    };
 
-    const dinars = pool.filter((r) => r.categoria === 'dinar' || r.categoria === 'ambdos');
-    const sopars = pool.filter((r) => r.categoria === 'sopar' || r.categoria === 'ambdos');
+    const dinarsSorted = pool
+      .filter(function (r) { return r.categoria === 'dinar' || r.categoria === 'ambdos'; })
+      .slice()
+      .sort(byTargetProximity);
+    const soparsSorted = pool
+      .filter(function (r) { return r.categoria === 'sopar' || r.categoria === 'ambdos'; })
+      .slice()
+      .sort(byTargetProximity);
 
+    if (!dinarsSorted.length || !soparsSorted.length) return null;
+
+    // Algoritme greedy per dies: per cada dia repartim proporcionalment el
+    // pressupost restant, i triem la recepta més propera al target dins del límit.
+    // Si no hi ha opcions dins del límit, agafem la més barata disponible (per no
+    // superar el pressupost setmanal).
+    const usedIds = {};
     const days = [];
-    let totalEstimat = 0;
+    let total = 0;
 
     for (let i = 0; i < 7; i++) {
-      const dinar = pickWithRotation(dinars, i, 'dinar');
-      const sopar = pickWithRotation(sopars, i + 3, 'sopar'); // offset perquè no coincideixi sempre
-      days.push({
-        name: DAYS_CA[i],
-        dinar: dinar,
-        sopar: sopar
-      });
-      totalEstimat += (dinar ? dinar.preu_aprox : 0) + (sopar ? sopar.preu_aprox : 0);
+      const daysLeft = 7 - i;
+      const remaining = Math.max(budgetNum - total, 0);
+      const dayBudget = daysLeft > 0 ? remaining / daysLeft : 0;
+
+      // Dinar: ~55% del pressupost del dia (a Barcelona el dinar sol ser més substanciós).
+      const dinar = pickRecipeForBudget(dinarsSorted, usedIds, dayBudget * 0.55);
+      if (dinar) usedIds[dinar.id] = true;
+
+      // Sopar: el que queda del dia (amb un mínim per evitar casos absurds).
+      const dinarCost = dinar ? dinar.preu_aprox : 0;
+      const soparBudget = Math.max(dayBudget - dinarCost, 1.0);
+      const sopar = pickRecipeForBudget(soparsSorted, usedIds, soparBudget);
+      if (sopar) usedIds[sopar.id] = true;
+
+      days.push({ name: DAYS_CA[i], dinar: dinar, sopar: sopar });
+      total += (dinar ? dinar.preu_aprox : 0) + (sopar ? sopar.preu_aprox : 0);
     }
 
-    // Escalem el total al voltant del pressupost (4 persones no, una persona).
-    // Per simplicitat, retornem el total directe.
     return {
       budget: budgetNum,
       bracket: bracket,
-      totalEstimat: Math.round(totalEstimat * 100) / 100,
+      totalEstimat: Math.round(total * 100) / 100,
       days: days,
       preferences: prefs
     };
   }
 
-  // Tria una recepta del pool rotant per índex, evitant repeticions consecutives.
-  function pickWithRotation(pool, i, tipus) {
-    if (!pool.length) return null;
-    return pool[i % pool.length];
+  // Tria la recepta del pool ordenada més propera al target, dins del maxPrice
+  // amb un 15% de marge. Si cap no hi encaixa, retorna la més barata disponible.
+  function pickRecipeForBudget(sortedPool, usedIds, maxPrice) {
+    const available = sortedPool.filter(function (r) { return !usedIds[r.id]; });
+    if (!available.length) return null;
+
+    const limit = maxPrice * 1.15;
+    const fitting = available.filter(function (r) { return r.preu_aprox <= limit; });
+    if (fitting.length) return fitting[0];
+
+    // Fallback: agafem la més barata (si tot està per sobre del target, anem al mínim).
+    return available.slice().sort(function (a, b) { return a.preu_aprox - b.preu_aprox; })[0];
   }
 
   // ------------------------------

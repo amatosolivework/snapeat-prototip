@@ -8,22 +8,14 @@
    Pair de logo SnapEat + accions secundàries
    ============================================================ */
 
-/* Topbar estil iOS — sticky amb blur quan fa scroll (large-title simulat) */
+/* Topbar — brand flotant sense barra blanca, part del scroll natural */
 .app-topbar {
-  position: sticky;
-  top: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
   padding: var(--space-2) 0;
-  margin: 0 calc(var(--space-5) * -1) var(--space-4);
-  padding-left: var(--space-5);
-  padding-right: var(--space-5);
-  background-color: rgba(250, 250, 249, 0.85);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  z-index: 5;
+  margin-bottom: var(--space-4);
 }
 
 .app-topbar .brand {

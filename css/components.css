@@ -1172,28 +1172,30 @@ select.input-field {
    Usat a pantalles d'acció principal (registrar, setmana)
    ============================================================ */
 
+/* Contenidor transparent — NOMÉS el botó flota, la barra no cobreix res */
 .footer-cta {
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
-  padding: var(--space-3) var(--space-4) calc(var(--space-3) + env(safe-area-inset-bottom, 0));
-  background-color: rgba(255, 255, 255, 0.92);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border-top: 1px solid rgba(231, 229, 228, 0.6);
+  padding: 0 var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom, 0));
   z-index: calc(var(--z-tab-bar) - 1);
   display: flex;
   gap: var(--space-2);
+  pointer-events: none;
 }
 
 /* Quan la pantalla té tab-bar, la CTA queda per sobre */
 .footer-cta--above-tabs {
-  bottom: var(--tab-bar-height);
+  bottom: calc(var(--tab-bar-height) + var(--space-2));
 }
 
+/* El botó sí té pointer-events i la seva shadow marcada perquè "flota" */
 .footer-cta .btn {
   flex: 1;
+  pointer-events: auto;
+  box-shadow: 0 10px 25px -8px rgba(16, 185, 129, 0.35),
+              0 4px 10px -4px rgba(28, 25, 23, 0.15);
 }
 
 /* Quan la pantalla té footer-cta, el container necessita padding extra */
