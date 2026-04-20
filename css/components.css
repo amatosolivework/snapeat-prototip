@@ -1027,6 +1027,103 @@ select.input-field {
 }
 
 /* ============================================================
+   TOAST — pill al top-center estil iOS Live Activity
+   Un sol toast a la vegada; els nous substitueixen l'anterior
+   ============================================================ */
+
+.toast-host {
+  position: fixed;
+  top: calc(var(--space-3) + env(safe-area-inset-top, 0));
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: calc(var(--z-modal) + 10);
+  padding: 0 var(--space-4);
+}
+
+.toast {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background-color: rgba(255, 255, 255, 0.92);
+  backdrop-filter: saturate(180%) blur(24px);
+  -webkit-backdrop-filter: saturate(180%) blur(24px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  box-shadow: 0 10px 28px -8px rgba(28, 25, 23, 0.20),
+              0 4px 10px -4px rgba(28, 25, 23, 0.08);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  max-width: calc(100% - var(--space-4));
+  opacity: 0;
+  transform: translateY(-14px) scale(0.96);
+  transition: opacity var(--duration-base) var(--ease-out),
+              transform var(--duration-base) var(--ease-spring);
+  pointer-events: auto;
+  line-height: var(--line-height-snug);
+}
+
+.toast--visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.toast__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.toast__icon svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+  fill: none;
+}
+
+.toast__text {
+  min-width: 0;
+}
+
+/* Variants amb tint subtil (mateix llenguatge iOS que els altres components) */
+.toast--success {
+  background-color: rgba(209, 250, 229, 0.95);
+  border-color: rgba(5, 150, 105, 0.25);
+  color: var(--color-ok-fg);
+}
+
+.toast--success .toast__icon {
+  color: var(--color-ok-accent);
+}
+
+.toast--error {
+  background-color: rgba(254, 226, 226, 0.95);
+  border-color: rgba(220, 38, 38, 0.25);
+  color: var(--color-bad-fg);
+}
+
+.toast--error .toast__icon {
+  color: var(--color-bad-accent);
+}
+
+.toast--info .toast__icon {
+  color: var(--color-text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    transition-duration: 0.01ms;
+  }
+}
+
+/* ============================================================
    BOTTOM SHEET — estil iOS native (Reminders, Health, Maps)
    Panell que llisca des de baix, amb drag handle + backdrop blur
    ============================================================ */

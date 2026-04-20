@@ -85,60 +85,63 @@ window.SnapEat.shared = (function () {
   //  Toast
   // ------------------------------
 
-  // Mostra un missatge efímer. type: 'success' | 'info' | 'error'.
+  // Icones SVG per al toast (inline, mateix estil Lucide que la resta).
+  const TOAST_ICONS = {
+    success: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>',
+    error:   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+    info:    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+  };
+
+  // Estat compartit: hi ha un sol toast a la vegada. Els nous substitueixen
+  // l'anterior en lloc d'apilar-se, que omplia mitja pantalla en ràfegues.
+  let activeToast = null;
+  let activeTimer = null;
+
+  // Mostra un missatge efímer en forma de pill arrodonida al top-center,
+  // estil Live Activity d'iOS. type: 'success' | 'info' | 'error'.
   function showToast(message, type) {
     if (!message) return;
-    const kind = type || 'info';
+    const kind = TOAST_ICONS[type] ? type : 'info';
 
-    // Reutilitzem un únic contenidor per evitar apilar toasts orfes.
+    // Reutilitzem un únic host contenidor a dalt.
     let host = document.getElementById('snapeat-toast-host');
     if (!host) {
       host = document.createElement('div');
       host.id = 'snapeat-toast-host';
+      host.className = 'toast-host';
       host.setAttribute('role', 'status');
       host.setAttribute('aria-live', 'polite');
-      host.style.position = 'fixed';
-      host.style.left = '50%';
-      host.style.bottom = '80px';
-      host.style.transform = 'translateX(-50%)';
-      host.style.zIndex = '200';
-      host.style.display = 'flex';
-      host.style.flexDirection = 'column';
-      host.style.gap = '8px';
-      host.style.pointerEvents = 'none';
+      host.setAttribute('aria-atomic', 'true');
       document.body.appendChild(host);
+    }
+
+    // Substituïm qualsevol toast actiu abans d'afegir el nou.
+    if (activeTimer) { clearTimeout(activeTimer); activeTimer = null; }
+    if (activeToast && activeToast.parentNode) {
+      activeToast.parentNode.removeChild(activeToast);
     }
 
     const toast = document.createElement('div');
     toast.className = 'toast toast--' + kind;
-    toast.textContent = message;
-    toast.style.background = kind === 'error' ? '#991B1B' : '#111827';
-    toast.style.color = '#fff';
-    toast.style.padding = '10px 16px';
-    toast.style.borderRadius = '12px';
-    toast.style.fontSize = '14px';
-    toast.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.10), 0 4px 6px -4px rgba(0,0,0,0.05)';
-    toast.style.maxWidth = '320px';
-    toast.style.pointerEvents = 'auto';
-    toast.style.opacity = '0';
-    toast.style.transition = 'opacity 200ms ease-out, transform 200ms ease-out';
-    toast.style.transform = 'translateY(8px)';
+    toast.innerHTML =
+      '<span class="toast__icon" aria-hidden="true">' + TOAST_ICONS[kind] + '</span>' +
+      '<span class="toast__text">' + escapeHtml(message) + '</span>';
 
     host.appendChild(toast);
+    activeToast = toast;
 
-    // Forcem un reflow per a la transició d'entrada.
+    // Trigger animació d'entrada al següent frame.
     requestAnimationFrame(function () {
-      toast.style.opacity = '1';
-      toast.style.transform = 'translateY(0)';
+      toast.classList.add('toast--visible');
     });
 
-    setTimeout(function () {
-      toast.style.opacity = '0';
-      toast.style.transform = 'translateY(8px)';
+    activeTimer = setTimeout(function () {
+      toast.classList.remove('toast--visible');
       setTimeout(function () {
         if (toast.parentNode) toast.parentNode.removeChild(toast);
+        if (activeToast === toast) activeToast = null;
       }, 220);
-    }, 2800);
+    }, 2600);
   }
 
   // ------------------------------
