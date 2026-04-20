@@ -134,19 +134,16 @@
     wireMealActions(list);
   }
 
-  // Retorna HTML per al thumbnail — imatge si n'hi ha, placeholder si no.
-  function mealThumbHtml(m) {
+  // Retorna HTML per a la zona media (hero): imatge si n'hi ha, placeholder si no.
+  function mealMediaHtml(m) {
     if (m.photoDataUrl) {
       return '<img class="apat-card__foto" src="' + shared.escapeAttr(m.photoDataUrl) + '" alt="">';
     }
-
     const photoUrl = data.getMealPhoto(m.nom || '');
     if (photoUrl) {
       return '<img class="apat-card__foto" src="' + shared.escapeAttr(photoUrl) + '" alt="">';
     }
-
-    // Placeholder amb la inicial en un gradient — el color depèn d'un hash simple
-    // perquè dos àpats diferents no acabin sempre del mateix color.
+    // Placeholder amb la inicial en gradient — hash estable per àpat.
     const initial = (m.nom || '?').trim().charAt(0).toUpperCase() || '?';
     const variant = PLACEHOLDER_VARIANTS[((m.id || '').length + initial.charCodeAt(0)) % PLACEHOLDER_VARIANTS.length];
     return '<div class="apat-card__foto-placeholder apat-card__foto-placeholder--' + variant + '" aria-hidden="true">' + escapeHtml(initial) + '</div>';
@@ -155,31 +152,40 @@
   function apatHtml(m) {
     const hora = m.hora || formatTime(new Date(m.createdAt || Date.now()));
     const nom = escapeHtml(m.nom || 'Àpat');
-    const extras = (m.extras && m.extras.length) ? m.extras.join(', ') : '';
+    const extras = (m.extras && m.extras.length) ? m.extras.join(' · ') : '';
     const extrasHtml = extras
-      ? '<p class="apat-card__extras">+ ' + escapeHtml(extras) + '</p>'
+      ? '<p class="apat-card__extras">' + escapeHtml(extras) + '</p>'
       : '';
 
-    // Mini-indicadors per àpat — 3 chips amb color segons estat.
+    // Macro chips amb inicial visible (H/V/P) + nom + color d'estat.
     const ind = m.indicadors || data.analyzeMeal(m.nom || '');
-    const chips = ['hidrats', 'verdures', 'proteina'].map(function (k) {
-      const st = ind[k] || 'bad';
-      const label = { hidrats: 'Hidrats', verdures: 'Verdures', proteina: 'Proteïna' }[k];
-      return '<span class="chip chip--mini chip--' + st + '" aria-label="' + shared.escapeAttr(label + ' ' + st) + '">' + escapeHtml(label) + '</span>';
+    const chipDefs = [
+      { key: 'hidrats', initial: 'H', label: 'Hidrats' },
+      { key: 'verdures', initial: 'V', label: 'Verdures' },
+      { key: 'proteina', initial: 'P', label: 'Proteïna' }
+    ];
+    const chips = chipDefs.map(function (c) {
+      const st = ind[c.key] || 'bad';
+      return '<span class="chip-macro chip-macro--' + st + '" aria-label="' + shared.escapeAttr(c.label + ': ' + st) + '">' +
+        '<span class="chip-macro__initial" aria-hidden="true">' + c.initial + '</span>' +
+        '<span class="chip-macro__label">' + escapeHtml(c.label) + '</span>' +
+      '</span>';
     }).join('');
 
     return '' +
       '<li class="apat-card" data-id="' + shared.escapeAttr(m.id) + '">' +
-        mealThumbHtml(m) +
+        '<div class="apat-card__media">' +
+          mealMediaHtml(m) +
+          '<span class="apat-card__hora-overlay">' + escapeHtml(hora) + '</span>' +
+        '</div>' +
         '<div class="apat-card__body">' +
-          '<span class="apat-card__hora">' + escapeHtml(hora) + '</span>' +
           '<h3 class="apat-card__nom">' + nom + '</h3>' +
           extrasHtml +
           '<div class="apat-card__chips">' + chips + '</div>' +
-        '</div>' +
-        '<div class="apat-card__actions">' +
-          '<button type="button" class="btn btn--ghost" data-action="edit" data-id="' + shared.escapeAttr(m.id) + '" aria-label="Editar àpat ' + shared.escapeAttr(m.nom || '') + '">Editar</button>' +
-          '<button type="button" class="btn btn--ghost" data-action="delete" data-id="' + shared.escapeAttr(m.id) + '" aria-label="Eliminar àpat ' + shared.escapeAttr(m.nom || '') + '">Eliminar</button>' +
+          '<div class="apat-card__actions">' +
+            '<button type="button" class="btn btn--ghost" data-action="edit" data-id="' + shared.escapeAttr(m.id) + '" aria-label="Editar àpat ' + shared.escapeAttr(m.nom || '') + '">Editar</button>' +
+            '<button type="button" class="btn btn--ghost" data-action="delete" data-id="' + shared.escapeAttr(m.id) + '" aria-label="Eliminar àpat ' + shared.escapeAttr(m.nom || '') + '">Eliminar</button>' +
+          '</div>' +
         '</div>' +
       '</li>';
   }

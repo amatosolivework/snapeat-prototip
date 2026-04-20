@@ -1,8 +1,8 @@
 /*
   setmana.js — Lògica de la pantalla "La meva setmana" (setmana.html).
-  Flux progressiu: pressupost → menú → llista → mode compra → resum.
-  Totes les accions principals van per un sticky CTA al peu (iOS style).
-  Els modals (recepta, swap, alternativa) són bottom-sheets.
+  Flow horitzontal: pressupost → menú → llista → mode compra → resum.
+  Cada step és una "pàgina" dins d'un flow-track amb slide horitzontal.
+  Tots els modals (recepta, swap, alternativa) són bottom-sheets.
 */
 
 (function () {
@@ -15,18 +15,48 @@
   const { escapeHtml, escapeAttr, formatPrice } = shared;
 
   // ------------------------------
-  //  Refs i estat
+  //  Estat del flow
   // ------------------------------
 
+  const STEPS = ['pressupost', 'menu', 'llista', 'compra', 'resum'];
+
+  const STEP_META = {
+    pressupost: {
+      title: 'La meva setmana',
+      subtitle: 'Planifica els teus àpats i la compra en minuts.',
+      ctaLabel: 'Generar menú setmanal'
+    },
+    menu: {
+      title: 'El teu menú',
+      subtitle: 'Tap a un àpat per veure la recepta o canviar-lo.',
+      ctaLabel: 'Perfecte! Generar llista de compra'
+    },
+    llista: {
+      title: 'Llista de compra',
+      subtitle: 'Revisa els ingredients abans d\'anar al súper.',
+      ctaLabel: 'Vaig al súper'
+    },
+    compra: {
+      title: 'Mode compra',
+      subtitle: 'Marca el que agafes. Pots substituir si cal.',
+      ctaLabel: 'Compra feta'
+    },
+    resum: {
+      title: 'Ben fet!',
+      subtitle: 'La setmana està llesta.',
+      ctaLabel: null
+    }
+  };
+
   const refs = {};
-  let currentStep = 'pressupost';
+  let currentStepIdx = 0;
 
   function cacheRefs() {
-    refs.sectPressupost = document.getElementById('section-pressupost');
-    refs.sectMenu = document.getElementById('section-menu');
-    refs.sectLlista = document.getElementById('section-llista');
-    refs.sectCompra = document.getElementById('section-compra');
-    refs.sectResum = document.getElementById('section-resum');
+    refs.topbar = document.querySelector('.app-topbar');
+    refs.stepBack = document.getElementById('step-back');
+    refs.stepTitle = document.getElementById('step-title');
+    refs.stepSubtitle = document.getElementById('step-subtitle');
+    refs.flowTrack = document.getElementById('flow-track');
 
     refs.budgetInput = document.getElementById('budget-input');
     refs.menuSetmanal = document.getElementById('menu-setmanal');
@@ -42,6 +72,65 @@
     refs.resumProgress = document.getElementById('resum-progress');
     refs.stickyCta = document.getElementById('sticky-cta');
     refs.stickyCtaBtn = document.getElementById('sticky-cta-btn');
+  }
+
+  // ------------------------------
+  //  Navegació entre steps (flow horitzontal)
+  // ------------------------------
+
+  function goToStep(name, opts) {
+    const idx = STEPS.indexOf(name);
+    if (idx < 0) return;
+    const options = opts || {};
+    currentStepIdx = idx;
+
+    // Transform el track horitzontalment.
+    if (refs.flowTrack) {
+      refs.flowTrack.style.transform = 'translateX(-' + (idx * 100) + '%)';
+    }
+
+    // Actualitza header i CTA segons step.
+    const meta = STEP_META[name];
+    if (meta) {
+      if (refs.stepTitle) refs.stepTitle.textContent = meta.title;
+      if (refs.stepSubtitle) refs.stepSubtitle.textContent = meta.subtitle;
+    }
+    if (refs.stepBack) refs.stepBack.hidden = (idx === 0);
+    updateStickyCta(name);
+
+    // Scroll vertical al top (el flow just ha canviat d'escena).
+    if (!options.skipScroll) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  function goBack() {
+    if (currentStepIdx > 0) goToStep(STEPS[currentStepIdx - 1]);
+  }
+
+  // ------------------------------
+  //  Sticky CTA — canvia de label segons step
+  // ------------------------------
+
+  function updateStickyCta(step) {
+    if (!refs.stickyCta || !refs.stickyCtaBtn) return;
+    const meta = STEP_META[step];
+    if (!meta || !meta.ctaLabel) {
+      refs.stickyCta.hidden = true;
+      return;
+    }
+    refs.stickyCta.hidden = false;
+    refs.stickyCtaBtn.textContent = meta.ctaLabel;
+    refs.stickyCtaBtn.disabled = false;
+
+    // Vincula l'acció.
+    const handlers = {
+      pressupost: onGenerarMenu,
+      menu: onGenerarLlista,
+      llista: onAnarComprar,
+      compra: onAcabar
+    };
+    refs.stickyCtaBtn.onclick = handlers[step] || null;
   }
 
   // ------------------------------
@@ -61,53 +150,27 @@
       });
     }
 
+    if (refs.stepBack) {
+      refs.stepBack.addEventListener('click', goBack);
+    }
+
     const savedPlan = data.getWeekPlan();
     const savedList = data.getShoppingList();
 
     if (savedPlan) renderWeekPlan(savedPlan);
     if (savedList && savedList.length) renderShoppingList(savedList);
 
-    // Determina el step inicial a partir de l'URL o de l'estat desat.
     const params = new URLSearchParams(location.search);
     if (params.get('mode') === 'compra' && savedList && savedList.length) {
-      showSection(refs.sectCompra);
       renderModeCompra(savedList);
-      setStep('compra');
+      goToStep('compra', { skipScroll: true });
     } else if (savedList && savedList.length) {
-      setStep('llista');
+      goToStep('llista', { skipScroll: true });
     } else if (savedPlan) {
-      setStep('menu');
+      goToStep('menu', { skipScroll: true });
     } else {
-      setStep('pressupost');
+      goToStep('pressupost', { skipScroll: true });
     }
-  }
-
-  // ------------------------------
-  //  Sticky CTA — un sol botó que canvia segons el step
-  // ------------------------------
-
-  function setStep(step) {
-    currentStep = step;
-    if (!refs.stickyCta || !refs.stickyCtaBtn) return;
-
-    const cfg = {
-      pressupost: { label: 'Generar menú setmanal', handler: onGenerarMenu, variant: 'primary' },
-      menu:       { label: 'Perfecte! Generar llista de compra', handler: onGenerarLlista, variant: 'primary' },
-      llista:     { label: 'Vaig al súper', handler: onAnarComprar, variant: 'primary' },
-      compra:     { label: 'Compra feta', handler: onAcabar, variant: 'primary' },
-      resum:      null
-    };
-
-    const c = cfg[step];
-    if (!c) {
-      refs.stickyCta.hidden = true;
-      return;
-    }
-    refs.stickyCta.hidden = false;
-    refs.stickyCtaBtn.textContent = c.label;
-    refs.stickyCtaBtn.className = 'btn btn--' + c.variant + ' btn--block';
-    refs.stickyCtaBtn.onclick = c.handler;
-    refs.stickyCtaBtn.disabled = false;
   }
 
   // ------------------------------
@@ -133,16 +196,12 @@
       data.setBudget(budget);
       data.setWeekPlan(plan);
       renderWeekPlan(plan);
-      setStep('menu');
-      if (refs.sectMenu) {
-        refs.sectMenu.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+      goToStep('menu');
     }, 350);
   }
 
   function renderWeekPlan(plan) {
     if (!plan || !plan.days) return;
-    showSection(refs.sectMenu);
     renderBudgetPill(plan);
     if (refs.menuSetmanal) {
       refs.menuSetmanal.innerHTML = plan.days.map(function (day, idx) {
@@ -181,23 +240,24 @@
       '</article>';
   }
 
-  // Mini-semàfor: 3 punts de color amb l'equilibri nutricional del dia.
+  // Mini-semàfor: 3 cercles més grans amb inicial H/V/P per entendre'ls a cop d'ull.
   function dayDotsHtml(balance) {
     const keys = ['hidrats', 'verdures', 'proteina'];
     const labels = { hidrats: 'Hidrats', verdures: 'Verdures', proteina: 'Proteïna' };
+    const initials = { hidrats: 'H', verdures: 'V', proteina: 'P' };
     const stateDesc = { ok: 'OK', warn: 'mig', bad: 'fluix' };
     return '<span class="day-balance" role="img" aria-label="Balanç nutricional: ' +
       keys.map(function (k) { return labels[k] + ' ' + stateDesc[balance[k] || 'bad']; }).join(', ') + '">' +
       keys.map(function (k) {
         const state = balance[k] || 'bad';
-        return '<span class="day-balance__dot day-balance__dot--' + state + '" aria-hidden="true"></span>';
+        return '<span class="day-balance__dot day-balance__dot--' + state + '" aria-hidden="true">' +
+          initials[k] + '</span>';
       }).join('') +
     '</span>';
   }
 
   function mealInDayHtml(label, recipe, dayIndex, mealType) {
     if (!recipe) return '<p class="week-day__empty">—</p>';
-    // Només 2 badges a la card: temps + preu. El detall va al bottom-sheet.
     const metaBadges =
       '<span class="meal-meta__badge"><span aria-hidden="true">⏱</span> ' + escapeHtml(recipe.temps_min + ' min') + '</span>' +
       '<span class="meal-meta__badge meal-meta__badge--price">' + escapeHtml(formatPrice(recipe.preu_aprox)) + '</span>';
@@ -272,10 +332,6 @@
     });
   }
 
-  // ------------------------------
-  //  Bottom-sheet de canvi d'àpat (swap)
-  // ------------------------------
-
   function openSwapSheet(dayIndex, mealType, currentRecipe) {
     const prefs = data.getPreferences();
     const plan = data.getWeekPlan();
@@ -349,8 +405,7 @@
     const list = data.generateShoppingList(plan);
     data.setShoppingList(list);
     renderShoppingList(list);
-    setStep('llista');
-    if (refs.sectLlista) refs.sectLlista.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    goToStep('llista');
   }
 
   const CATEGORY_ICON = {
@@ -363,7 +418,6 @@
 
   function renderShoppingList(list) {
     if (!refs.llistaCompra) return;
-    showSection(refs.sectLlista);
 
     const groups = groupByCategory(list);
     const categoriesOrder = ['Verdures', 'Proteïna', 'Llet i derivats', 'Bàsics', 'Altres'];
@@ -411,10 +465,8 @@
   function onAnarComprar() {
     const list = data.getShoppingList();
     if (!list || !list.length) { shared.showToast('Genera primer la llista', 'error'); return; }
-    showSection(refs.sectCompra);
     renderModeCompra(list);
-    setStep('compra');
-    if (refs.sectCompra) refs.sectCompra.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    goToStep('compra');
   }
 
   function renderModeCompra(list) {
@@ -480,10 +532,6 @@
       else if (pct >= 80) refs.compraBar.classList.add('progress-bar--warn');
     }
   }
-
-  // ------------------------------
-  //  Bottom-sheet d'alternativa d'ingredient
-  // ------------------------------
 
   function openAltSheet(item) {
     const alternatives = data.getAlternatives(item.nom);
@@ -563,14 +611,7 @@
       }
     }
 
-    showSection(refs.sectResum);
-    setStep('resum');
-    if (refs.sectResum) refs.sectResum.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-
-  function showSection(el) {
-    if (!el) return;
-    el.hidden = false;
+    goToStep('resum');
   }
 
   document.addEventListener('DOMContentLoaded', init);

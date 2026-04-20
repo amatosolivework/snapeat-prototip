@@ -317,6 +317,73 @@
 }
 
 /* ============================================================
+   FLOW HORITZONTAL — slide entre steps (setmana)
+   Cada step és una "pàgina" dins d'un track que es transforma
+   ============================================================ */
+
+.flow-container {
+  position: relative;
+  overflow: hidden;
+  /* Estirem fins els marges laterals del container per màxim espai horitzontal */
+  margin: 0 calc(var(--space-5) * -1);
+}
+
+.flow-track {
+  display: flex;
+  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.flow-step {
+  flex: 0 0 100%;
+  min-width: 0;
+  padding: 0 var(--space-5);
+  /* Cada step és un bloc independent — no es barreja l'scroll amb el veí */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-track {
+    transition-duration: 0.01ms;
+  }
+}
+
+/* Botó de tornar al pas anterior — estil iOS chevron-left */
+.step-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-right: var(--space-2);
+  box-shadow: var(--shadow-sm);
+  transition: background-color var(--duration-fast) var(--ease-in-out),
+              transform var(--duration-fast) var(--ease-out);
+}
+
+/* L'atribut hidden ha de guanyar sobre el display inline-flex */
+.step-back[hidden] {
+  display: none;
+}
+
+.step-back:active {
+  transform: scale(0.94);
+  background-color: var(--color-surface-subtle);
+}
+
+.step-back svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* ============================================================
    SETMANA (setmana.html)
    ============================================================ */
 
@@ -338,19 +405,8 @@
   line-height: var(--line-height-snug);
 }
 
-/* Seccions de setmana */
-.setmana-section {
-  margin-bottom: var(--space-6);
-}
-
-.setmana-section h2 {
-  font-size: var(--font-size-h1);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: var(--tracking-tight);
-  margin-bottom: var(--space-3);
-}
-
-.setmana-section .hint {
+/* Hints dins els steps */
+.flow-step .hint {
   margin-bottom: var(--space-4);
 }
 
@@ -502,22 +558,29 @@
   margin: 0;
 }
 
-/* Mini-semàfor: 3 punts amb balanç nutricional del dia */
+/* Mini-semàfor: 3 cercles amb H/V/P per entendre cada macro a cop d'ull */
 .day-balance {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 4px var(--space-2);
-  background-color: var(--color-surface-subtle);
-  border-radius: var(--radius-full);
+  flex-shrink: 0;
 }
 
 .day-balance__dot {
-  width: 8px;
-  height: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
   border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  font-variant: all-petite-caps;
+  letter-spacing: 0;
+  color: #FFFFFF;
+  line-height: 1;
   flex-shrink: 0;
-  box-shadow: inset 0 0 0 1px rgba(28, 25, 23, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(28, 25, 23, 0.06);
 }
 
 .day-balance__dot--ok   { background-color: var(--color-ok-accent); }

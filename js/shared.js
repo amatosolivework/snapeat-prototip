@@ -394,6 +394,52 @@ window.SnapEat.shared = (function () {
   }
 
   // ------------------------------
+  //  Footer CTA: amaga en scroll-down, mostra en scroll-up
+  //  Pattern iOS Mail: el CTA desapareix quan l'usuari llegeix, reapareix
+  //  quan torna enrere (scroll up) o quan arriba al final de la pàgina.
+  //  Anti-flicker: threshold de 8px abans de commutar.
+  // ------------------------------
+
+  function wireFooterCtaScroll() {
+    const cta = document.querySelector('.footer-cta');
+    if (!cta) return;
+
+    let lastY = window.scrollY || 0;
+    let ticking = false;
+    const THRESHOLD = 8;
+    const SHOW_AT_TOP = 80; // sempre visible prop del top
+
+    function update() {
+      const currentY = window.scrollY || 0;
+      const delta = currentY - lastY;
+
+      if (currentY < SHOW_AT_TOP) {
+        cta.classList.remove('footer-cta--hidden-scroll');
+      } else if (Math.abs(delta) > THRESHOLD) {
+        if (delta > 0) {
+          cta.classList.add('footer-cta--hidden-scroll');
+        } else {
+          cta.classList.remove('footer-cta--hidden-scroll');
+        }
+        lastY = currentY;
+      }
+
+      // Sempre visible si arribem al final de la pàgina.
+      const atBottom = (window.innerHeight + currentY) >= (document.body.scrollHeight - 40);
+      if (atBottom) cta.classList.remove('footer-cta--hidden-scroll');
+
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+
+  // ------------------------------
   //  Fix iOS PWA: evitar que els links interns obrin Safari
   //  Quan l'app s'afegeix a la pantalla d'inici (mode standalone), per defecte
   //  iOS obre els <a href> en una pestanya de Safari en lloc de navegar dins
@@ -436,6 +482,7 @@ window.SnapEat.shared = (function () {
     markActiveTab();
     wireSkipLink();
     handleStandaloneNavigation();
+    wireFooterCtaScroll();
   });
 
   return {
