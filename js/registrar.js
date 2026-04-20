@@ -147,6 +147,8 @@
           indicadors: indicadors,
           photoDataUrl: state.photoDataUrl,
           hora: shared.formatTime(now),
+          // Data local (YYYY-MM-DD) per filtrar àpats d'avui sense saltar un dia a UTC.
+          fecha: data.todayKey ? data.todayKey() : now.toISOString().slice(0, 10),
           createdAt: now.toISOString()
         };
         data.addMeal(meal);

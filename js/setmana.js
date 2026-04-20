@@ -35,6 +35,9 @@
     refs.btnAnarComprar = document.getElementById('btn-anar-comprar');
     refs.productesCompra = document.getElementById('productes-compra');
     refs.compraProgress = document.getElementById('compra-progress');
+    refs.compraAmount = document.getElementById('compra-amount');
+    refs.compraBar = document.getElementById('compra-bar');
+    refs.compraBarFill = document.getElementById('compra-bar-fill');
     refs.btnAcabar = document.getElementById('btn-acabar');
     refs.resumGastat = document.getElementById('resum-gastat');
     refs.resumTotal = document.getElementById('resum-total');
@@ -135,91 +138,136 @@
       refs.menuBudgetTotal.textContent = formatPrice(plan.totalEstimat) + ' (pressupost ' + formatPrice(plan.budget) + ')';
     }
     if (refs.menuSetmanal) {
-      refs.menuSetmanal.innerHTML = plan.days.map(dayCardHtml).join('');
+      refs.menuSetmanal.innerHTML = plan.days.map(function (day, idx) {
+        return dayCardHtml(day, idx);
+      }).join('');
       wireDayCards(refs.menuSetmanal, plan);
     }
+    // Si hi ha una llista de compra ja generada i l'acabem de canviar,
+    // avisem l'usuari amb un subtle hint sota el botó.
+    refreshLlistaHint(plan);
   }
 
-  function dayCardHtml(day) {
+  // Si l'usuari ja havia generat la llista i després canvia un àpat, avisem.
+  function refreshLlistaHint(plan) {
+    const list = data.getShoppingList();
+    if (!list || !list.length) return;
+    // Marquem l'existència d'una llista desactualitzada com a flag a localStorage.
+    // La llegim a l'hora de renderitzar-la.
+    const btn = refs.btnGenerarLlista;
+    if (btn) btn.textContent = 'Tornar a generar la llista de compra';
+  }
+
+  function dayCardHtml(day, dayIndex) {
     return '' +
-      '<article class="week-day" data-day="' + escapeAttr(day.name) + '">' +
+      '<article class="week-day" data-day-index="' + dayIndex + '">' +
         '<h3 class="week-day__title">' + escapeHtml(day.name) + '</h3>' +
-        mealInDayHtml('Dinar', day.dinar) +
-        mealInDayHtml('Sopar', day.sopar) +
+        mealInDayHtml('Dinar', day.dinar, dayIndex, 'dinar') +
+        mealInDayHtml('Sopar', day.sopar, dayIndex, 'sopar') +
       '</article>';
   }
 
-  function mealInDayHtml(label, recipe) {
+  function mealInDayHtml(label, recipe, dayIndex, mealType) {
     if (!recipe) return '<p class="week-day__empty">—</p>';
+    const meta = data.getRecipeMeta ? data.getRecipeMeta(recipe) : { dificultat: '', utensili: '' };
+    const metaBadges =
+      '<span class="meal-meta__badge"><span aria-hidden="true">⏱</span> ' + escapeHtml(recipe.temps_min + ' min') + '</span>' +
+      (meta.utensili ? '<span class="meal-meta__badge">' + escapeHtml(meta.utensili) + '</span>' : '') +
+      (meta.dificultat ? '<span class="meal-meta__badge meal-meta__badge--dif">' + escapeHtml(meta.dificultat) + '</span>' : '') +
+      '<span class="meal-meta__badge meal-meta__badge--price">' + escapeHtml(formatPrice(recipe.preu_aprox)) + '</span>';
+
     return '' +
-      '<div class="week-day__meal" data-recipe-id="' + escapeAttr(recipe.id) + '">' +
+      '<div class="week-day__meal" data-day-index="' + dayIndex + '" data-meal-type="' + mealType + '">' +
         '<p class="week-day__meal-label">' + escapeHtml(label) + '</p>' +
-        '<button type="button" class="week-day__meal-name btn btn--ghost" data-recipe-id="' + escapeAttr(recipe.id) + '" style="text-align:left;display:block;width:100%;padding:4px 0;">' +
+        '<button type="button" class="week-day__meal-name" data-recipe-id="' + escapeAttr(recipe.id) + '" data-day-index="' + dayIndex + '" data-meal-type="' + mealType + '">' +
           escapeHtml(recipe.nom) +
         '</button>' +
-        '<p class="week-day__meal-meta" style="font-size:12px;color:#6B7280;">' +
-          escapeHtml(recipe.temps_min + ' min · ' + formatPrice(recipe.preu_aprox)) +
-        '</p>' +
+        '<div class="meal-meta">' + metaBadges + '</div>' +
       '</div>';
   }
 
   function wireDayCards(container, plan) {
-    container.querySelectorAll('[data-recipe-id]').forEach(function (btn) {
-      if (btn.tagName !== 'BUTTON') return;
+    container.querySelectorAll('.week-day__meal-name').forEach(function (btn) {
       btn.addEventListener('click', function () {
         const id = btn.dataset.recipeId;
+        const dayIndex = Number(btn.dataset.dayIndex);
+        const mealType = btn.dataset.mealType;
         const recipe = data.getRecipes().find(function (r) { return r.id === id; });
-        if (recipe) showRecipeModal(recipe);
+        if (recipe) showRecipeModal(recipe, dayIndex, mealType);
       });
     });
   }
 
-  function showRecipeModal(recipe) {
+  function showRecipeModal(recipe, dayIndex, mealType) {
     const ingredients = (recipe.ingredients || []).map(function (ing) {
       return '<li>' + escapeHtml(ing.nom + ' — ' + ing.quantitat) + '</li>';
     }).join('');
+    const meta = data.getRecipeMeta ? data.getRecipeMeta(recipe) : { dificultat: '', utensili: '' };
+    const metaLine = recipe.temps_min + ' min · ' + (meta.utensili || '') +
+      (meta.dificultat ? ' · ' + meta.dificultat : '') +
+      ' · ' + formatPrice(recipe.preu_aprox);
 
     const body = '' +
-      '<p style="color:#4B5563;margin:0 0 12px;">' +
-        escapeHtml(recipe.temps_min + ' minuts · ' + formatPrice(recipe.preu_aprox)) +
-      '</p>' +
-      '<h3 style="font-size:16px;font-weight:600;margin:0 0 8px;">Ingredients</h3>' +
-      '<ul style="padding-left:20px;margin:0;">' + ingredients + '</ul>';
+      '<p class="recipe-modal__meta">' + escapeHtml(metaLine) + '</p>' +
+      '<h3 class="recipe-modal__subtitle">Ingredients</h3>' +
+      '<ul class="recipe-modal__ingredients">' + ingredients + '</ul>';
 
-    showInfoModal(recipe.nom, body);
+    // Si sabem a quin dia pertany la recepta, oferim un botó per canviar-la.
+    const canSwap = typeof dayIndex === 'number' && (mealType === 'dinar' || mealType === 'sopar');
+
+    showRecipeInfoModal(recipe.nom, body, canSwap ? {
+      swapLabel: 'Canviar aquest àpat',
+      onSwap: function () { showAlternativeRecipesModal(dayIndex, mealType, recipe); }
+    } : null);
   }
 
-  // Mostra un modal informatiu senzill (OK com a únic botó).
-  function showInfoModal(title, bodyHtml) {
-    const overlay = document.createElement('div');
-    overlay.className = 'modal modal--visible';
-    overlay.setAttribute('role', 'dialog');
-    overlay.setAttribute('aria-modal', 'true');
-    overlay.setAttribute('aria-labelledby', 'info-modal-title');
-    overlay.style.position = 'fixed';
-    overlay.style.inset = '0';
-    overlay.style.background = 'rgba(17, 24, 39, 0.5)';
-    overlay.style.display = 'flex';
-    overlay.style.alignItems = 'center';
-    overlay.style.justifyContent = 'center';
-    overlay.style.padding = '24px';
-    overlay.style.zIndex = '180';
+  // Modal informatiu amb acció opcional de swap.
+  function showRecipeInfoModal(title, bodyHtml, swapOpts) {
+    const overlay = buildOverlay('recipe-modal-title');
+    const swapButton = swapOpts
+      ? '<button type="button" class="btn btn--secondary" data-action="swap">' + escapeHtml(swapOpts.swapLabel) + '</button>'
+      : '';
 
     overlay.innerHTML = '' +
-      '<div class="modal__dialog" role="document" style="background:#fff;border-radius:16px;padding:24px;max-width:420px;width:100%;box-shadow:0 10px 15px -3px rgba(0,0,0,0.10);">' +
-        '<h2 id="info-modal-title" class="modal__title" style="margin:0 0 12px;font-size:20px;font-weight:700;">' + escapeHtml(title) + '</h2>' +
-        '<div class="modal__body" style="margin-bottom:16px;">' + bodyHtml + '</div>' +
-        '<div class="modal__actions" style="display:flex;justify-content:flex-end;">' +
+      '<div class="modal__dialog" role="document">' +
+        '<h2 id="recipe-modal-title" class="modal__title">' + escapeHtml(title) + '</h2>' +
+        '<div class="modal__body">' + bodyHtml + '</div>' +
+        '<div class="modal__actions">' +
+          swapButton +
           '<button type="button" class="btn btn--primary" data-action="close">Tancar</button>' +
         '</div>' +
       '</div>';
 
+    const close = mountOverlay(overlay);
+    const closeBtn = overlay.querySelector('[data-action="close"]');
+    if (closeBtn) { closeBtn.focus(); closeBtn.addEventListener('click', close); }
+
+    if (swapOpts) {
+      const swapBtn = overlay.querySelector('[data-action="swap"]');
+      if (swapBtn) {
+        swapBtn.addEventListener('click', function () {
+          close();
+          swapOpts.onSwap();
+        });
+      }
+    }
+  }
+
+  // Crea un overlay modal accessible amb els atributs correctes.
+  function buildOverlay(titleId) {
+    const overlay = document.createElement('div');
+    overlay.className = 'modal modal--visible modal--overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-labelledby', titleId);
+    return overlay;
+  }
+
+  // Munta l'overlay al body, gestiona focus i retorna una funció close().
+  function mountOverlay(overlay) {
     const previous = document.activeElement;
     document.body.appendChild(overlay);
     document.body.style.overflow = 'hidden';
-
-    const closeBtn = overlay.querySelector('[data-action="close"]');
-    closeBtn.focus();
 
     function close() {
       document.removeEventListener('keydown', onKey);
@@ -232,9 +280,83 @@
       if (e.key === 'Escape') { e.preventDefault(); close(); }
     }
 
-    closeBtn.addEventListener('click', close);
     overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
     document.addEventListener('keydown', onKey);
+    return close;
+  }
+
+  // ------------------------------
+  //  Canvi d'un àpat individual dins el menú
+  // ------------------------------
+
+  function showAlternativeRecipesModal(dayIndex, mealType, currentRecipe) {
+    const prefs = data.getPreferences();
+    const plan = data.getWeekPlan();
+    // Excloem la resta d'àpats ja triats a la setmana per evitar repeticions.
+    const excludeIds = [];
+    if (plan && plan.days) {
+      plan.days.forEach(function (d) {
+        if (d.dinar) excludeIds.push(d.dinar.id);
+        if (d.sopar) excludeIds.push(d.sopar.id);
+      });
+    }
+    const alternatives = data.getAlternativeRecipes(currentRecipe, mealType, prefs, excludeIds);
+
+    if (!alternatives.length) {
+      shared.showToast('No trobem alternatives diferents ara mateix', 'info');
+      return;
+    }
+
+    const overlay = buildOverlay('swap-modal-title');
+    const listHtml = alternatives.map(function (r, idx) {
+      const m = data.getRecipeMeta ? data.getRecipeMeta(r) : { dificultat: '', utensili: '' };
+      const subline = r.temps_min + ' min · ' + (m.utensili || '') +
+        (m.dificultat ? ' · ' + m.dificultat : '') +
+        ' · ' + formatPrice(r.preu_aprox);
+      return '' +
+        '<label class="swap-option">' +
+          '<input type="radio" name="swap-choice" value="' + idx + '"' + (idx === 0 ? ' checked' : '') + '>' +
+          '<span class="swap-option__body">' +
+            '<span class="swap-option__name">' + escapeHtml(r.nom) + '</span>' +
+            '<span class="swap-option__meta">' + escapeHtml(subline) + '</span>' +
+          '</span>' +
+        '</label>';
+    }).join('');
+
+    overlay.innerHTML = '' +
+      '<div class="modal__dialog" role="document">' +
+        '<h2 id="swap-modal-title" class="modal__title">Quin àpat et ve més bé?</h2>' +
+        '<p class="modal__body">Substituirem <strong>' + escapeHtml(currentRecipe.nom) + '</strong>. Tria la que més t\'abelleixi.</p>' +
+        '<fieldset class="swap-options">' +
+          '<legend class="visually-hidden">Alternatives</legend>' +
+          listHtml +
+        '</fieldset>' +
+        '<div class="modal__actions">' +
+          '<button type="button" class="btn btn--ghost" data-action="cancel">Cancel·lar</button>' +
+          '<button type="button" class="btn btn--primary" data-action="confirm">Canviar</button>' +
+        '</div>' +
+      '</div>';
+
+    const close = mountOverlay(overlay);
+    const cancelBtn = overlay.querySelector('[data-action="cancel"]');
+    const confirmBtn = overlay.querySelector('[data-action="confirm"]');
+    if (confirmBtn) confirmBtn.focus();
+    if (cancelBtn) cancelBtn.addEventListener('click', close);
+
+    if (confirmBtn) {
+      confirmBtn.addEventListener('click', function () {
+        const selected = overlay.querySelector('input[name="swap-choice"]:checked');
+        const idx = selected ? Number(selected.value) : 0;
+        const chosen = alternatives[idx];
+        if (!chosen) { close(); return; }
+        const newPlan = data.replaceMealInPlan(dayIndex, mealType, chosen);
+        close();
+        if (newPlan) {
+          renderWeekPlan(newPlan);
+          shared.showToast('Àpat canviat: ' + chosen.nom, 'success');
+        }
+      });
+    }
   }
 
   // ------------------------------
@@ -373,8 +495,26 @@
 
   function updateCompraProgress(list) {
     if (!refs.compraProgress) return;
-    const comprats = list.filter(function (i) { return i.comprat; }).length;
-    refs.compraProgress.textContent = comprats + ' de ' + list.length + ' productes';
+    const comprats = list.filter(function (i) { return i.comprat; });
+    const total = list.length;
+    const gastat = comprats.reduce(function (sum, i) { return sum + (Number(i.preuAprox) || 0); }, 0);
+    const budget = data.getBudget();
+
+    refs.compraProgress.textContent = comprats.length + ' de ' + total + ' productes';
+
+    if (refs.compraAmount) {
+      refs.compraAmount.textContent = formatPrice(gastat) + ' de ' + formatPrice(budget);
+    }
+
+    if (refs.compraBar && refs.compraBarFill) {
+      const pct = budget > 0 ? Math.min(100, Math.round((gastat / budget) * 100)) : 0;
+      refs.compraBarFill.style.width = pct + '%';
+      refs.compraBar.setAttribute('aria-valuenow', String(pct));
+      // Canvi subtil de color: verd fins 80%, ambar fins 100%, vermell si supera.
+      refs.compraBar.classList.remove('progress-bar--warn', 'progress-bar--over');
+      if (gastat > budget) refs.compraBar.classList.add('progress-bar--over');
+      else if (pct >= 80) refs.compraBar.classList.add('progress-bar--warn');
+    }
   }
 
   // ------------------------------

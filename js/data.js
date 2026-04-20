@@ -49,6 +49,34 @@ window.SnapEat.data = (function () {
     return Array.isArray(meals) ? meals : [];
   }
 
+  // Format YYYY-MM-DD amb hora local — evita saltar un dia en dispositius UTC.
+  function todayKey() {
+    const d = new Date();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return d.getFullYear() + '-' + mm + '-' + dd;
+  }
+
+  function mealDateKey(meal) {
+    if (meal && meal.fecha) return meal.fecha;
+    if (meal && meal.createdAt) return String(meal.createdAt).slice(0, 10);
+    return null;
+  }
+
+  // Retorna només els àpats registrats avui. Els àpats antics es conserven al
+  // localStorage (podrien alimentar mètriques futures), però no embruten el
+  // dashboard d'avui.
+  function getMealsToday() {
+    const key = todayKey();
+    return getMeals().filter(function (m) {
+      const mk = mealDateKey(m);
+      // Fallback: si l'àpat és antic i no té data, el tractem com a d'avui
+      // (prototip legacy) per no amagar-lo a usuàries que facin servir la demo.
+      if (!mk) return true;
+      return mk === key;
+    });
+  }
+
   function addMeal(meal) {
     const meals = getMeals();
     meals.push(meal);
@@ -582,6 +610,81 @@ window.SnapEat.data = (function () {
     });
   }
 
+  // Deriva metadades de cocció a partir del temps, ingredients i nom.
+  // Laura té zero experiència cuinant; necessita saber "puc fer això?" d'una ullada.
+  function getRecipeMeta(recipe) {
+    if (!recipe) return { dificultat: '', utensili: '' };
+    const nom = String(recipe.nom || '').toLowerCase();
+    const temps = Number(recipe.temps_min) || 0;
+    const numIngredients = (recipe.ingredients || []).length;
+
+    let dificultat;
+    if (temps <= 15 && numIngredients <= 4) dificultat = 'Fàcil';
+    else if (temps <= 30) dificultat = 'Mitjà';
+    else dificultat = 'Amb temps';
+
+    let utensili;
+    if (nom.indexOf('al forn') !== -1 || nom.indexOf('rostid') !== -1) utensili = 'Al forn';
+    else if (nom.indexOf('a la planxa') !== -1) utensili = 'Planxa';
+    else if (nom.indexOf('saltat') !== -1 || nom.indexOf('saltad') !== -1) utensili = 'Paella';
+    else if (nom.indexOf('amanida') !== -1) utensili = 'Sense foc';
+    else if (nom.indexOf('iogurt') !== -1) utensili = 'Sense foc';
+    else if (nom.indexOf('sopa') !== -1 || nom.indexOf('crema') !== -1) utensili = 'Cassola';
+    else if (nom.indexOf('estofad') !== -1) utensili = 'Cassola';
+    else if (nom.indexOf('truita') !== -1 || nom.indexOf('ferrat') !== -1) utensili = 'Paella';
+    else if (nom.indexOf('hamburguesa') !== -1) utensili = 'Paella';
+    else utensili = 'Cassola';
+
+    return { dificultat: dificultat, utensili: utensili };
+  }
+
+  // Retorna 3 receptes alternatives del mateix tipus i preu similar,
+  // excloent la recepta actual i (opcionalment) una llista d'IDs a evitar.
+  // S'usa per al canvi d'un sol àpat dins del menú setmanal.
+  function getAlternativeRecipes(currentRecipe, mealType, prefs, excludeIds) {
+    if (!currentRecipe) return [];
+    const excluded = new Set(excludeIds || []);
+    excluded.add(currentRecipe.id);
+
+    let pool = filterRecipesByPrefs(getRecipes(), prefs || getPreferences());
+    if (!pool.length) pool = getRecipes();
+
+    // Filtrem per tipus d'àpat (dinar/sopar/ambdos).
+    pool = pool.filter(function (r) {
+      if (excluded.has(r.id)) return false;
+      if (mealType === 'dinar') return r.categoria === 'dinar' || r.categoria === 'ambdos';
+      if (mealType === 'sopar') return r.categoria === 'sopar' || r.categoria === 'ambdos';
+      return true;
+    });
+
+    // Ordenem per proximitat al preu actual (més rellevant per al pressupost).
+    const refPrice = Number(currentRecipe.preu_aprox) || 0;
+    pool.sort(function (a, b) {
+      return Math.abs(a.preu_aprox - refPrice) - Math.abs(b.preu_aprox - refPrice);
+    });
+
+    return pool.slice(0, 3);
+  }
+
+  // Substitueix un àpat dins el pla setmanal (day + mealType) per una nova recepta.
+  // Retorna el pla actualitzat. No regenera la llista de compra — això es marcarà
+  // com a "pendent de regenerar" a la UI.
+  function replaceMealInPlan(dayIndex, mealType, newRecipe) {
+    const plan = getWeekPlan();
+    if (!plan || !plan.days || !plan.days[dayIndex]) return null;
+    if (mealType !== 'dinar' && mealType !== 'sopar') return null;
+    plan.days[dayIndex][mealType] = newRecipe;
+    // Recalculem el total estimat.
+    let total = 0;
+    plan.days.forEach(function (day) {
+      if (day.dinar) total += Number(day.dinar.preu_aprox) || 0;
+      if (day.sopar) total += Number(day.sopar.preu_aprox) || 0;
+    });
+    plan.totalEstimat = Math.round(total * 100) / 100;
+    setWeekPlan(plan);
+    return plan;
+  }
+
   // ------------------------------
   //  Generació de menú setmanal
   // ------------------------------
@@ -696,48 +799,48 @@ window.SnapEat.data = (function () {
     if (!mealCount || mealCount === 0) {
       return {
         icon: '🌱',
-        text: 'Comença el dia registrant el primer àpat. Nomes caldrà una foto!'
+        text: 'Comença el dia fent una foto del primer àpat. Nomes triga 10 segons.'
       };
     }
 
     if (aggregated.verdures === 'bad') {
       return {
         icon: '🥗',
-        text: 'Et falten verdures avui. Afegeix amanida o verdures al sopar.'
+        text: 'Una amanida o verdures al sopar i tens el dia rodó.'
       };
     }
 
     if (aggregated.proteina === 'bad') {
       return {
         icon: '🥚',
-        text: 'Falta una mica de proteïna. Un ou, iogurt o cigrons seran un bon complement.'
+        text: 'Afegeix un ou, un iogurt o cigrons i tanques la proteïna del dia.'
       };
     }
 
     if (aggregated.hidrats === 'bad') {
       return {
         icon: '🌾',
-        text: 'Bé! Podries afegir una mica d\'hidrats (arròs, pa o quinoa) per tenir més energia.'
+        text: 'Un plat d\'arròs, pasta o pa integral al sopar et donarà energia.'
       };
     }
 
     if (aggregated.hidrats === 'warn') {
       return {
         icon: '💡',
-        text: 'Hidrats una mica alts. Al sopar prova amb verdures i proteïna lleugera.'
+        text: 'Al sopar, prova un plat lleuger: verdures amb proteïna i ja està.'
       };
     }
 
     if (aggregated.verdures === 'warn' || aggregated.proteina === 'warn') {
       return {
         icon: '🌿',
-        text: 'Vas bé! Un toc més de verdures i proteïna acabarà d\'equilibrar el dia.'
+        text: 'Ja tens molt guanyat. Un toc més de verdures o proteïna i clausures.'
       };
     }
 
     return {
       icon: '✨',
-      text: 'Avui vas equilibrada. Continua així, sense pressió!'
+      text: 'Dia equilibrat. Gran feina, Laura!'
     };
   }
 
@@ -837,6 +940,8 @@ window.SnapEat.data = (function () {
 
   return {
     getMeals: getMeals,
+    getMealsToday: getMealsToday,
+    todayKey: todayKey,
     getMeal: getMeal,
     addMeal: addMeal,
     updateMeal: updateMeal,
@@ -848,6 +953,7 @@ window.SnapEat.data = (function () {
 
     getWeekPlan: getWeekPlan,
     setWeekPlan: setWeekPlan,
+    replaceMealInPlan: replaceMealInPlan,
 
     getShoppingList: getShoppingList,
     setShoppingList: setShoppingList,
@@ -864,8 +970,10 @@ window.SnapEat.data = (function () {
 
     getDailySuggestion: getDailySuggestion,
     getAlternatives: getAlternatives,
+    getAlternativeRecipes: getAlternativeRecipes,
 
     getRecipes: getRecipes,
+    getRecipeMeta: getRecipeMeta,
     getMealPhoto: getMealPhoto,
 
     // Util de desenvolupament — neteja tot l'estat emmagatzemat.

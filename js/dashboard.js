@@ -13,10 +13,19 @@
   const { escapeHtml, formatTime } = shared;
 
   // Etiquetes de text segons estat del semàfor.
+  // To Coach: mai culpem, sempre proposem un gest concret i fàcil.
   const STATUS_TEXT = {
-    hidrats: { ok: 'Hidrats al punt', warn: 'Una mica alts', bad: 'Et falten hidrats' },
-    verdures: { ok: 'Verdures OK', warn: 'Poc a poc', bad: 'Falten verdures' },
-    proteina: { ok: 'Proteïna al punt', warn: 'Una mica baixa', bad: 'Falta proteïna' }
+    hidrats: { ok: 'Hidrats al punt', warn: 'Una mica alts', bad: 'Encara hi caben hidrats' },
+    verdures: { ok: 'Verdures OK', warn: 'Afegeix-ne un toc més', bad: 'Un plat verd i ho tens' },
+    proteina: { ok: 'Proteïna al punt', warn: 'Una mica baixa', bad: 'Afegeix un ou o iogurt' }
+  };
+
+  // Pista breu sota cada cèl·lula: un gest concret per tancar la bretxa.
+  // Només es mostra quan l'estat no és 'ok'.
+  const STATUS_HINT = {
+    hidrats: { warn: 'Prova amanida al sopar', bad: 'Un bol d\'arròs o pasta' },
+    verdures: { warn: 'Una amanida al sopar', bad: 'Un grapat d\'enciam o bròquil' },
+    proteina: { warn: 'Un iogurt al matí', bad: 'Ou, tonyina o cigrons' }
   };
 
   // Icones (emoji) per a cada categoria del semàfor — reforç visual a l'anti-daltonisme.
@@ -31,7 +40,8 @@
 
   function renderDashboard() {
     renderTodayDate();
-    const meals = data.getMeals();
+    // Només àpats d'avui — els d'altres dies es conserven però no embruten el dashboard.
+    const meals = data.getMealsToday ? data.getMealsToday() : data.getMeals();
     renderSemafor(meals);
     renderSuggestion(meals);
     renderMealsList(meals);
@@ -68,11 +78,17 @@
     const safeState = (state === 'ok' || state === 'warn' || state === 'bad') ? state : 'bad';
     const statusText = STATUS_TEXT[cell.key][safeState];
     const icon = CATEGORY_ICON[cell.key] || '•';
+    const hint = safeState !== 'ok' && STATUS_HINT[cell.key] ? STATUS_HINT[cell.key][safeState] : '';
+    const hintHtml = hint
+      ? '<p class="semafor-cell__hint">' + escapeHtml(hint) + '</p>'
+      : '';
+    const ariaLabel = cell.label + ': ' + statusText + (hint ? '. ' + hint : '');
     return '' +
-      '<article class="semafor-cell semafor-cell--' + safeState + '" aria-label="' + shared.escapeAttr(cell.label + ': ' + statusText) + '">' +
+      '<article class="semafor-cell semafor-cell--' + safeState + '" aria-label="' + shared.escapeAttr(ariaLabel) + '">' +
         '<span class="semafor-cell__icon" aria-hidden="true">' + icon + '</span>' +
         '<h3 class="semafor-cell__label">' + escapeHtml(cell.label) + '</h3>' +
         '<p class="semafor-cell__status">' + escapeHtml(statusText) + '</p>' +
+        hintHtml +
       '</article>';
   }
 

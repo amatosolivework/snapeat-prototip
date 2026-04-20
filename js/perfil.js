@@ -31,7 +31,8 @@
         senseLactosa: lactChk ? lactChk.checked : false
       };
       data.setPreferences(newPrefs);
-      shared.showToast('Guardat', 'success');
+      // Missatge Coach: no només "guardat" — explicita l'efecte per tancar el bucle.
+      shared.showToast('Guardat. Els pròxims menús tindran en compte aquestes preferències.', 'success');
     }
 
     [vegChk, glutenChk, lactChk].forEach(function (el) {
@@ -49,7 +50,7 @@
           return;
         }
         data.setBudget(n);
-        shared.showToast('Guardat', 'success');
+        shared.showToast('Pressupost guardat. A partir d\'ara, els menús s\'adaptaran a ' + n + '€.', 'success');
       });
     }
   }

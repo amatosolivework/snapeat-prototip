@@ -48,7 +48,7 @@
       <div id="menu-setmanal" class="week-grid">
         <!-- Populated by setmana.js with 7 day cards -->
       </div>
-      <button type="button" id="btn-generar-llista" class="btn btn--primary btn--block">M'agrada — Generar llista de compra</button>
+      <button type="button" id="btn-generar-llista" class="btn btn--primary btn--block">Perfecte! Generar llista de compra</button>
     </section>
 
     <section id="section-llista" class="setmana-section" hidden aria-labelledby="llista-title">
@@ -65,11 +65,19 @@
 
     <section id="section-compra" class="setmana-section" hidden aria-labelledby="compra-title">
       <h2 id="compra-title">Mode compra</h2>
-      <p class="hint" aria-live="polite" id="compra-progress">0 de 0 productes</p>
+      <div class="compra-status">
+        <div class="compra-status__row">
+          <p class="compra-status__count" aria-live="polite" id="compra-progress">0 de 0 productes</p>
+          <p class="compra-status__amount" aria-live="polite" id="compra-amount">0 € de 0 €</p>
+        </div>
+        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="compra-bar">
+          <div class="progress-bar__fill" id="compra-bar-fill"></div>
+        </div>
+      </div>
       <div id="productes-compra">
         <!-- Populated by setmana.js with bigger, touch-friendly items -->
       </div>
-      <button type="button" id="btn-acabar" class="btn btn--secondary btn--block">Acabar compra</button>
+      <button type="button" id="btn-acabar" class="btn btn--secondary btn--block">Compra feta</button>
     </section>
 
     <section id="section-resum" class="setmana-section" hidden aria-labelledby="resum-title">
@@ -124,7 +132,7 @@
     </a>
   </nav>
 
-  <a href="registrar.html" class="fab" aria-label="Registrar nou àpat">
+  <a href="registrar.html" class="fab" id="fab-registrar" aria-label="Registrar nou àpat">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
   </a>
 

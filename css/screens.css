@@ -91,82 +91,50 @@
   margin-bottom: var(--space-3);
 }
 
-/* Empty state d'àpats del dia — visualment engaging */
+/* Empty state d'àpats del dia — visualment engaging, compacte */
 .apat-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: var(--space-3);
-  padding: var(--space-6) var(--space-4);
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-4);
   background-color: var(--color-surface);
   border: 1.5px dashed var(--color-border-strong);
   border-radius: var(--radius-lg);
 }
 
 .apat-empty__illustration {
-  width: 72px;
-  height: 72px;
+  width: 56px;
+  height: 56px;
   border-radius: var(--radius-full);
   background: var(--gradient-hero);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 36px;
-  margin-bottom: var(--space-2);
+  font-size: 28px;
+  margin-bottom: 2px;
 }
 
-.apat-empty p {
+.apat-empty > p {
   color: var(--color-text);
   font-size: var(--font-size-body);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-semibold);
   margin: 0;
 }
 
-.apat-empty__hint {
-  color: var(--color-text-muted) !important;
-  font-size: var(--font-size-small) !important;
-  font-weight: var(--font-weight-regular) !important;
-}
-
-/* Empty state genèric */
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: var(--space-3);
-  padding: var(--space-6) var(--space-4);
-  background-color: var(--color-surface);
-  border: 1.5px dashed var(--color-border-strong);
-  border-radius: var(--radius-lg);
+.apat-empty .apat-empty__hint {
   color: var(--color-text-muted);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-regular);
+  margin: 0;
 }
 
-.empty-state__icon {
-  width: 48px;
-  height: 48px;
-  color: var(--color-text-subtle);
-  stroke: currentColor;
-  fill: none;
-}
-
-.empty-state__title {
-  font-size: var(--font-size-h3);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-}
-
-.empty-state__text {
-  font-size: var(--font-size-body);
-  color: var(--color-text-muted);
-  max-width: 28ch;
-}
-
-.empty-state__cta {
-  margin-top: var(--space-2);
+/* CTA forta dins l'empty state — porta directament a registrar un àpat */
+.apat-empty__cta {
+  margin-top: var(--space-3);
+  padding: var(--space-3) var(--space-5);
 }
 
 /* ============================================================
@@ -530,9 +498,152 @@
   margin: var(--space-1) 0 0;
 }
 
+/* Metadades de cocció dins una meal card — to Coach: "puc fer això?" d'una ullada */
+.meal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: var(--space-1);
+}
+
+.meal-meta__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px var(--space-2);
+  background-color: var(--color-surface-subtle);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-micro);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+  border-radius: var(--radius-full);
+  letter-spacing: 0;
+}
+
+.meal-meta__badge--dif {
+  background-color: var(--color-brand-soft);
+  color: var(--color-brand-dark);
+}
+
+.meal-meta__badge--price {
+  background-color: var(--color-accent-warm-soft);
+  color: #78350F;
+}
+
 .week-day__empty {
   color: var(--color-text-subtle);
   font-size: var(--font-size-small);
+}
+
+/* Modal de recepta — metadades i llista d'ingredients amb estils coherents */
+.recipe-modal__meta {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-small);
+  margin: 0 0 var(--space-3);
+  font-weight: var(--font-weight-medium);
+}
+
+.recipe-modal__subtitle {
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin: 0 0 var(--space-2);
+}
+
+.recipe-modal__ingredients {
+  padding-left: var(--space-5);
+  margin: 0;
+  color: var(--color-text);
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-base);
+}
+
+.recipe-modal__ingredients li {
+  margin-bottom: 2px;
+}
+
+/* Modal swap d'àpat — selecció entre 3 alternatives */
+.swap-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.swap-option {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-in-out),
+              background-color var(--duration-fast) var(--ease-in-out);
+}
+
+.swap-option:hover {
+  border-color: var(--color-border-strong);
+  background-color: var(--color-surface-subtle);
+}
+
+.swap-option:has(input:checked) {
+  border-color: var(--color-brand);
+  background-color: var(--color-brand-soft);
+}
+
+.swap-option input[type="radio"] {
+  margin-top: 3px;
+  accent-color: var(--color-brand);
+  flex-shrink: 0;
+}
+
+.swap-option__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.swap-option__name {
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  line-height: var(--line-height-snug);
+}
+
+.swap-option__meta {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-regular);
+}
+
+/* Utilitat: modal creat dinàmicament per JS (sense necessitat d'estils inline) */
+.modal--overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(28, 25, 23, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  z-index: var(--z-modal);
+}
+
+.modal--overlay .modal__dialog {
+  width: 100%;
+  max-width: 420px;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
 }
 
 /* -------------------- Llista de compra -------------------- */
@@ -580,6 +691,39 @@
 
 .shopping-group__list li:last-child {
   border-bottom: none;
+}
+
+/* Estat de la compra — comptador i pressupost + barra de progrés */
+.compra-status {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-4);
+  box-shadow: var(--shadow-sm);
+}
+
+.compra-status__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.compra-status__count {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
+  margin: 0;
+}
+
+.compra-status__amount {
+  font-size: var(--font-size-body);
+  color: var(--color-text);
+  font-weight: var(--font-weight-semibold);
+  margin: 0;
+  font-variant-numeric: tabular-nums;
 }
 
 /* Mode compra — items grans i tàctils */
