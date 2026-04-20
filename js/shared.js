@@ -391,12 +391,48 @@ window.SnapEat.shared = (function () {
   }
 
   // ------------------------------
+  //  Fix iOS PWA: evitar que els links interns obrin Safari
+  //  Quan l'app s'afegeix a la pantalla d'inici (mode standalone), per defecte
+  //  iOS obre els <a href> en una pestanya de Safari en lloc de navegar dins
+  //  la PWA. Interceptem i forcem location.href per mantenir el context.
+  // ------------------------------
+
+  function handleStandaloneNavigation() {
+    const isStandalone = (window.navigator.standalone === true) ||
+      (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+    if (!isStandalone) return;
+
+    document.addEventListener('click', function (e) {
+      const link = e.target.closest && e.target.closest('a[href]');
+      if (!link) return;
+
+      const href = link.getAttribute('href');
+      if (!href) return;
+
+      // Deixem passar: anchors, protocols especials, atributs target forçats.
+      if (href.charAt(0) === '#') return;
+      if (/^(mailto:|tel:|sms:|javascript:)/i.test(href)) return;
+      if (link.target && link.target !== '_self' && link.target !== '') return;
+      if (link.hasAttribute('download')) return;
+
+      // Si és absolut, només interceptem si és al mateix origin.
+      if (/^https?:\/\//i.test(href)) {
+        if (href.indexOf(location.origin) !== 0) return;
+      }
+
+      e.preventDefault();
+      window.location.href = link.href;
+    });
+  }
+
+  // ------------------------------
   //  Inicialització
   // ------------------------------
 
   document.addEventListener('DOMContentLoaded', function () {
     markActiveTab();
     wireSkipLink();
+    handleStandaloneNavigation();
   });
 
   return {
