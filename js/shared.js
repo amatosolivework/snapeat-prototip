@@ -230,6 +230,137 @@ window.SnapEat.shared = (function () {
   }
 
   // ------------------------------
+  //  Bottom sheet (iOS-style)
+  //  Panell que llisca des de baix amb backdrop blur. Substitueix els modals
+  //  centrats per donar-li l'aire natiu iOS.
+  //  Ús: const close = shared.bottomSheet({ title, bodyHtml, actions, onClose })
+  // ------------------------------
+
+  function bottomSheet(config) {
+    const cfg = config || {};
+    const titleId = 'bs-title-' + Math.floor(Math.random() * 1e6);
+
+    const root = document.createElement('div');
+    root.className = 'bottom-sheet';
+    root.setAttribute('role', 'dialog');
+    root.setAttribute('aria-modal', 'true');
+    root.setAttribute('aria-labelledby', titleId);
+
+    const backdrop = document.createElement('div');
+    backdrop.className = 'bottom-sheet__backdrop';
+
+    const panel = document.createElement('div');
+    panel.className = 'bottom-sheet__panel';
+
+    // Drag handle (decoratiu, però també tap-target per tancar amb gestos futurs)
+    const handle = document.createElement('div');
+    handle.className = 'bottom-sheet__handle';
+    handle.setAttribute('aria-hidden', 'true');
+
+    const header = document.createElement('header');
+    header.className = 'bottom-sheet__header';
+
+    const title = document.createElement('h2');
+    title.className = 'bottom-sheet__title';
+    title.id = titleId;
+    title.textContent = cfg.title || '';
+
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'bottom-sheet__close';
+    closeBtn.setAttribute('aria-label', 'Tancar');
+    closeBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
+
+    header.appendChild(title);
+    header.appendChild(closeBtn);
+
+    const body = document.createElement('div');
+    body.className = 'bottom-sheet__body';
+    if (cfg.bodyHtml) body.innerHTML = cfg.bodyHtml;
+    else if (cfg.bodyNode) body.appendChild(cfg.bodyNode);
+
+    panel.appendChild(handle);
+    panel.appendChild(header);
+    panel.appendChild(body);
+
+    // Accions: footer amb botons. Si no s'especifica, s'amaga.
+    let footer = null;
+    if (Array.isArray(cfg.actions) && cfg.actions.length) {
+      footer = document.createElement('footer');
+      footer.className = 'bottom-sheet__footer';
+      cfg.actions.forEach(function (a, idx) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn btn--' + (a.variant || 'primary');
+        btn.textContent = a.label || 'OK';
+        btn.dataset.actionIndex = String(idx);
+        footer.appendChild(btn);
+      });
+      panel.appendChild(footer);
+    }
+
+    root.appendChild(backdrop);
+    root.appendChild(panel);
+
+    const previousFocus = document.activeElement;
+    document.body.appendChild(root);
+    document.body.style.overflow = 'hidden';
+
+    // Força reflow abans d'animar entrada.
+    /* eslint-disable no-unused-expressions */
+    root.getBoundingClientRect().height;
+    /* eslint-enable no-unused-expressions */
+    root.classList.add('bottom-sheet--visible');
+
+    function close() {
+      root.classList.remove('bottom-sheet--visible');
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+      // Esperem la transició abans de remoure.
+      setTimeout(function () {
+        if (root.parentNode) root.parentNode.removeChild(root);
+      }, 320);
+      if (previousFocus && previousFocus.focus) {
+        try { previousFocus.focus(); } catch (e) { /* ignore */ }
+      }
+      if (typeof cfg.onClose === 'function') cfg.onClose();
+    }
+
+    function onKey(e) {
+      if (e.key === 'Escape') { e.preventDefault(); close(); }
+    }
+
+    closeBtn.addEventListener('click', close);
+    backdrop.addEventListener('click', close);
+    document.addEventListener('keydown', onKey);
+
+    // Wire actions: el click invoca onClick amb funció close() disponible.
+    if (footer && cfg.actions) {
+      cfg.actions.forEach(function (a, idx) {
+        const btn = footer.querySelector('[data-action-index="' + idx + '"]');
+        if (!btn) return;
+        btn.addEventListener('click', function () {
+          if (typeof a.onClick === 'function') {
+            const result = a.onClick({ close: close, root: root });
+            // Si onClick retorna false, no tanca automàticament.
+            if (result !== false && a.closeOnClick !== false) close();
+          } else if (a.closeOnClick !== false) {
+            close();
+          }
+        });
+      });
+    }
+
+    // Primer focus al primer botó d'acció o al close.
+    setTimeout(function () {
+      const firstAction = footer && footer.querySelector('.btn');
+      (firstAction || closeBtn).focus();
+    }, 100);
+
+    return close;
+  }
+
+  // ------------------------------
   //  Tab actiu i skip-link
   // ------------------------------
 
@@ -276,6 +407,7 @@ window.SnapEat.shared = (function () {
     uid: uid,
     showToast: showToast,
     confirm: confirm,
+    bottomSheet: bottomSheet,
     escapeHtml: escapeHtml,
     escapeAttr: escapeAttr
   };

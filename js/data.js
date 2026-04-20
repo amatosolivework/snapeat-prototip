@@ -298,6 +298,12 @@ window.SnapEat.data = (function () {
         { nom: 'Ceba', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 0.30 },
         { nom: 'Salsa de soja', quantitat: '2 cullerades', categoria: 'Bàsics', preuAprox: 0.15 }
       ],
+      passos: [
+        'Talla el pebrot, el carbassó i la ceba a daus petits.',
+        'Posa una mica d\'oli en una paella i salteja les verdures 5 minuts.',
+        'Afegeix l\'arròs cuit i remena 2 minuts més.',
+        'Tira un rajolí de salsa de soja, remena i serveix.'
+      ],
       temps_min: 15,
       preu_aprox: 2.55,
       categoria: 'ambdos',
@@ -311,6 +317,12 @@ window.SnapEat.data = (function () {
         { nom: 'Patates', quantitat: '300g', categoria: 'Verdures', preuAprox: 0.50 },
         { nom: 'Tomàquet', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 0.50 },
         { nom: 'Oli d\'oliva', quantitat: 'al gust', categoria: 'Bàsics', preuAprox: 0.20 }
+      ],
+      passos: [
+        'Talla les patates a rodanxes fines i fregeix-les a foc mig 10 minuts.',
+        'Bat els ous en un bol i barreja\'ls amb les patates.',
+        'Aboca la barreja a la paella i cuina 3 minuts per cada costat.',
+        'Serveix amb tomàquet tallat a rodanxes al costat.'
       ],
       temps_min: 20,
       preu_aprox: 1.80,
@@ -326,6 +338,12 @@ window.SnapEat.data = (function () {
         { nom: 'All', quantitat: '2 grans', categoria: 'Bàsics', preuAprox: 0.10 },
         { nom: 'Oli d\'oliva', quantitat: '3 cullerades', categoria: 'Bàsics', preuAprox: 0.20 }
       ],
+      passos: [
+        'Posa aigua amb sal a bullir i cuina la pasta segons el paquet.',
+        'Mentre bull, talla el bròquil en floretes petites i afegeix-lo a l\'última meitat de cocció.',
+        'Escorre la pasta i el bròquil junts.',
+        'Amaneix amb oli, alls trinxats i una mica de sal.'
+      ],
       temps_min: 12,
       preu_aprox: 2.00,
       categoria: 'ambdos',
@@ -339,6 +357,12 @@ window.SnapEat.data = (function () {
         { nom: 'Patates', quantitat: '400g', categoria: 'Verdures', preuAprox: 0.70 },
         { nom: 'Llimona', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 0.30 },
         { nom: 'Herbes provençals', quantitat: 'al gust', categoria: 'Bàsics', preuAprox: 0.10 }
+      ],
+      passos: [
+        'Preescalfa el forn a 200 °C.',
+        'Posa el pit de pollastre i les patates tallades a una safata.',
+        'Afegeix sal, herbes provençals, suc de llimona i un raig d\'oli.',
+        'Forneja 30 minuts fins que estigui daurat.'
       ],
       temps_min: 35,
       preu_aprox: 5.60,
@@ -354,6 +378,12 @@ window.SnapEat.data = (function () {
         { nom: 'Tomàquet fregit', quantitat: '100g', categoria: 'Bàsics', preuAprox: 0.70 },
         { nom: 'Ceba', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 0.30 }
       ],
+      passos: [
+        'Talla la ceba ben petita i sofregeix-la en oli 3 minuts.',
+        'Afegeix el tomàquet fregit i els cigrons escorreguts.',
+        'Incorpora els espinacs i remena fins que es redueixin.',
+        'Cuina 5 minuts més i serveix.'
+      ],
       temps_min: 18,
       preu_aprox: 3.70,
       categoria: 'ambdos',
@@ -367,6 +397,12 @@ window.SnapEat.data = (function () {
         { nom: 'Enciam', quantitat: '1 bossa', categoria: 'Verdures', preuAprox: 1.20 },
         { nom: 'Alvocat', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 1.50 },
         { nom: 'Tomàquet cherry', quantitat: '150g', categoria: 'Verdures', preuAprox: 1.20 }
+      ],
+      passos: [
+        'Cuina el pit de pollastre a la planxa amb una mica de sal i oli.',
+        'Mentre, neteja l\'enciam i talla el tomàquet cherry per la meitat.',
+        'Talla el pollastre a tires i l\'alvocat a daus.',
+        'Barreja-ho tot al bol i amaneix amb oli i sal al gust.'
       ],
       temps_min: 15,
       preu_aprox: 6.20,
@@ -382,6 +418,12 @@ window.SnapEat.data = (function () {
         { nom: 'Ceba', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 0.30 },
         { nom: 'Pebrot', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 0.80 }
       ],
+      passos: [
+        'Talla la ceba, la pastanaga i el pebrot a daus petits.',
+        'Sofregeix-ho tot en una cassola amb oli 5 minuts.',
+        'Afegeix les llenties i cobreix amb aigua fins que les tapi.',
+        'Cuina a foc lent 30 minuts fins que siguin tendres.'
+      ],
       temps_min: 40,
       preu_aprox: 2.50,
       categoria: 'dinar',
@@ -395,6 +437,12 @@ window.SnapEat.data = (function () {
         { nom: 'Mongeta tendra', quantitat: '300g', categoria: 'Verdures', preuAprox: 1.80 },
         { nom: 'Llimona', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 0.30 },
         { nom: 'Oli d\'oliva', quantitat: 'al gust', categoria: 'Bàsics', preuAprox: 0.20 }
+      ],
+      passos: [
+        'Preescalfa el forn a 190 °C i posa el salmó en una safata.',
+        'Amaneix amb oli, sal i suc de llimona.',
+        'Forneja 15 minuts.',
+        'Mentrestant, bull la mongeta 8 minuts i serveix-la al costat.'
       ],
       temps_min: 25,
       preu_aprox: 9.80,
@@ -410,6 +458,12 @@ window.SnapEat.data = (function () {
         { nom: 'Ceba', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 0.30 },
         { nom: 'Brou de verdures', quantitat: '500ml', categoria: 'Bàsics', preuAprox: 0.80 }
       ],
+      passos: [
+        'Talla la carbassa, la patata i la ceba a daus.',
+        'Posa-ho tot a la cassola amb el brou i porta a ebullició.',
+        'Cuina 20 minuts fins que tot estigui tou.',
+        'Tritura amb una batedora fins que quedi crema.'
+      ],
       temps_min: 25,
       preu_aprox: 2.80,
       categoria: 'sopar',
@@ -424,6 +478,12 @@ window.SnapEat.data = (function () {
         { nom: 'Tomàquet', quantitat: '2 unitats', categoria: 'Verdures', preuAprox: 1.00 },
         { nom: 'All', quantitat: '2 grans', categoria: 'Bàsics', preuAprox: 0.10 }
       ],
+      passos: [
+        'Sofregeix la ceba i l\'all trinxat en oli.',
+        'Afegeix el tomàquet ratllat i cuina 5 minuts.',
+        'Incorpora les mongetes i remena per barrejar.',
+        'Cuina 5 minuts més i serveix.'
+      ],
       temps_min: 20,
       preu_aprox: 2.70,
       categoria: 'dinar',
@@ -436,6 +496,12 @@ window.SnapEat.data = (function () {
         { nom: 'Ous', quantitat: '2 unitats', categoria: 'Proteïna', preuAprox: 0.40 },
         { nom: 'Espinacs', quantitat: '150g', categoria: 'Verdures', preuAprox: 1.20 },
         { nom: 'Pa integral', quantitat: '2 llesques', categoria: 'Bàsics', preuAprox: 0.40 }
+      ],
+      passos: [
+        'Posa els espinacs en una paella amb una mica d\'oli i cuina 3 minuts.',
+        'Trasllada els espinacs a un plat.',
+        'Fregeix els ous a la mateixa paella fins que la clara estigui feta.',
+        'Serveix-ho tot amb pa torrat.'
       ],
       temps_min: 10,
       preu_aprox: 2.00,
@@ -451,6 +517,12 @@ window.SnapEat.data = (function () {
         { nom: 'Carbassó', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 0.90 },
         { nom: 'Albergínia', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 1.00 }
       ],
+      passos: [
+        'Talla les verdures a daus grossos i posa-les en una safata de forn.',
+        'Amaneix amb oli i sal, forneja a 200 °C 25 minuts.',
+        'Mentre, cuina la quinoa en dos cops el seu volum d\'aigua 15 minuts.',
+        'Barreja-ho tot al plat i serveix.'
+      ],
       temps_min: 30,
       preu_aprox: 3.90,
       categoria: 'sopar',
@@ -464,6 +536,12 @@ window.SnapEat.data = (function () {
         { nom: 'Pastanaga', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 0.25 },
         { nom: 'Ceba', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 0.30 },
         { nom: 'Brou de verdures', quantitat: '700ml', categoria: 'Bàsics', preuAprox: 1.00 }
+      ],
+      passos: [
+        'Talla la pastanaga i la ceba a daus petits.',
+        'Porta el brou a ebullició amb les verdures.',
+        'Cuina 10 minuts i afegeix els fideus.',
+        'Cuina 5 minuts més i serveix.'
       ],
       temps_min: 20,
       preu_aprox: 1.85,
@@ -479,6 +557,12 @@ window.SnapEat.data = (function () {
         { nom: 'Tomàquet', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 0.50 },
         { nom: 'Cogombre', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 0.60 }
       ],
+      passos: [
+        'Neteja l\'enciam i trosseja\'l a un bol gran.',
+        'Talla el tomàquet i el cogombre a daus.',
+        'Afegeix la tonyina escorreguda per sobre.',
+        'Amaneix amb oli, sal i vinagre.'
+      ],
       temps_min: 8,
       preu_aprox: 3.50,
       categoria: 'sopar',
@@ -492,6 +576,12 @@ window.SnapEat.data = (function () {
         { nom: 'Pebrot', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 0.80 },
         { nom: 'Ceba', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 0.30 },
         { nom: 'Pastanaga', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 0.25 }
+      ],
+      passos: [
+        'Talla el pit de pollastre a tires fines.',
+        'Salteja\'l a foc fort en una paella amb oli 5 minuts.',
+        'Afegeix el pebrot, la pastanaga i la ceba tallats.',
+        'Continua saltant 8 minuts més fins que estigui tou.'
       ],
       temps_min: 18,
       preu_aprox: 4.75,
@@ -507,6 +597,12 @@ window.SnapEat.data = (function () {
         { nom: 'Salsa de soja', quantitat: '2 cullerades', categoria: 'Bàsics', preuAprox: 0.15 },
         { nom: 'Sèsam', quantitat: '1 cullerada', categoria: 'Bàsics', preuAprox: 0.20 }
       ],
+      passos: [
+        'Talla el tofu a taquets i bull el bròquil 5 minuts.',
+        'Marca el tofu a la planxa amb oli fins que quedi daurat.',
+        'Amaneix amb salsa de soja i sèsam per sobre.',
+        'Serveix amb el bròquil al costat.'
+      ],
       temps_min: 15,
       preu_aprox: 3.75,
       categoria: 'ambdos',
@@ -519,6 +615,12 @@ window.SnapEat.data = (function () {
         { nom: 'Macarrons', quantitat: '200g', categoria: 'Bàsics', preuAprox: 0.50 },
         { nom: 'Salsa de tomàquet', quantitat: '300g', categoria: 'Bàsics', preuAprox: 1.00 },
         { nom: 'Formatge ratllat', quantitat: '50g', categoria: 'Llet i derivats', preuAprox: 0.80 }
+      ],
+      passos: [
+        'Cuina els macarrons segons el paquet.',
+        'Escalfa la salsa de tomàquet en una paella.',
+        'Barreja els macarrons escorreguts amb la salsa.',
+        'Serveix amb formatge ratllat per sobre.'
       ],
       temps_min: 15,
       preu_aprox: 2.30,
@@ -534,6 +636,12 @@ window.SnapEat.data = (function () {
         { nom: 'Pebrot', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 0.80 },
         { nom: 'Ceba', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 0.30 }
       ],
+      passos: [
+        'Preescalfa el forn a 180 °C.',
+        'Disposa les patates, el pebrot i la ceba a una safata.',
+        'Posa el lluç per sobre, amaneix amb oli i sal.',
+        'Forneja 25 minuts i ja està.'
+      ],
       temps_min: 30,
       preu_aprox: 6.30,
       categoria: 'dinar',
@@ -547,6 +655,12 @@ window.SnapEat.data = (function () {
         { nom: 'Albergínia', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 1.00 },
         { nom: 'Ceba', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 0.30 },
         { nom: 'Ous', quantitat: '2 unitats', categoria: 'Proteïna', preuAprox: 0.40 }
+      ],
+      passos: [
+        'Posa els pebrots, l\'albergínia i la ceba al forn a 200 °C 40 min.',
+        'Mentre, bull els ous 10 minuts i pela\'ls.',
+        'Pela les verdures quan es refredin i talla-les a tires.',
+        'Amaneix amb oli, sal i serveix amb els ous tallats.'
       ],
       temps_min: 45,
       preu_aprox: 3.30,
@@ -562,6 +676,12 @@ window.SnapEat.data = (function () {
         { nom: 'Enciam', quantitat: '1 bossa', categoria: 'Verdures', preuAprox: 1.20 },
         { nom: 'Pa d\'hamburguesa', quantitat: '2 unitats', categoria: 'Bàsics', preuAprox: 0.60 }
       ],
+      passos: [
+        'Escorre i aixafa els cigrons amb una forquilla.',
+        'Barreja\'ls amb la ceba trinxada i forma 2 hamburgueses.',
+        'Cuina-les a la paella 5 minuts per cada costat.',
+        'Serveix-les al pa amb enciam.'
+      ],
       temps_min: 25,
       preu_aprox: 3.00,
       categoria: 'sopar',
@@ -574,6 +694,12 @@ window.SnapEat.data = (function () {
         { nom: 'Iogurt natural', quantitat: '2 unitats', categoria: 'Llet i derivats', preuAprox: 0.70 },
         { nom: 'Plàtan', quantitat: '1 unitat', categoria: 'Verdures', preuAprox: 0.30 },
         { nom: 'Flocs de civada', quantitat: '40g', categoria: 'Bàsics', preuAprox: 0.20 }
+      ],
+      passos: [
+        'Posa el iogurt en un bol.',
+        'Talla el plàtan a rodanxes.',
+        'Afegeix el plàtan i els flocs de civada per sobre.',
+        'Ja està llest per menjar.'
       ],
       temps_min: 5,
       preu_aprox: 1.20,
@@ -588,6 +714,12 @@ window.SnapEat.data = (function () {
         { nom: 'Enciam', quantitat: '1 bossa', categoria: 'Verdures', preuAprox: 1.20 },
         { nom: 'Tomàquet cherry', quantitat: '150g', categoria: 'Verdures', preuAprox: 1.20 },
         { nom: 'Oli d\'oliva', quantitat: 'al gust', categoria: 'Bàsics', preuAprox: 0.20 }
+      ],
+      passos: [
+        'Amaneix els filets de gall dindi amb sal i oli.',
+        'Cuina\'ls a la planxa 5 minuts per cada costat.',
+        'Mentre, trosseja l\'enciam i el tomàquet cherry.',
+        'Serveix el gall dindi sobre l\'amanida.'
       ],
       temps_min: 15,
       preu_aprox: 6.40,
@@ -664,6 +796,20 @@ window.SnapEat.data = (function () {
     });
 
     return pool.slice(0, 3);
+  }
+
+  // Retorna el balanç nutricional agregat d'un dia del pla (dinar + sopar).
+  // Usat pel mini-semàfor al menú setmanal.
+  function getDayBalance(day) {
+    if (!day) return { hidrats: 'bad', verdures: 'bad', proteina: 'bad' };
+    const meals = [];
+    if (day.dinar && day.dinar.nom) {
+      meals.push({ nom: day.dinar.nom, indicadors: analyzeMeal(day.dinar.nom) });
+    }
+    if (day.sopar && day.sopar.nom) {
+      meals.push({ nom: day.sopar.nom, indicadors: analyzeMeal(day.sopar.nom) });
+    }
+    return aggregateIndicadors(meals);
   }
 
   // Substitueix un àpat dins el pla setmanal (day + mealType) per una nova recepta.
@@ -964,6 +1110,7 @@ window.SnapEat.data = (function () {
 
     analyzeMeal: analyzeMeal,
     aggregateIndicadors: aggregateIndicadors,
+    getDayBalance: getDayBalance,
 
     generateWeekPlan: generateWeekPlan,
     generateShoppingList: generateShoppingList,

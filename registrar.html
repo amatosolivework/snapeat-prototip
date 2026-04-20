@@ -14,7 +14,7 @@
 <body>
   <a href="#main-content" class="skip-link">Salta al contingut principal</a>
 
-  <main id="main-content" class="container" role="main">
+  <main id="main-content" class="container has-footer-cta" role="main">
     <header class="registrar-header">
       <button type="button" id="btn-cancelar" class="btn btn--ghost" aria-label="Cancel·lar i tornar">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
@@ -64,11 +64,12 @@
         </fieldset>
       </section>
 
-      <div class="registrar-actions">
-        <button type="submit" id="btn-registrar" class="btn btn--primary btn--block">Registrar àpat</button>
-      </div>
     </form>
   </main>
+
+  <div class="footer-cta">
+    <button type="submit" form="form-registrar" id="btn-registrar" class="btn btn--primary btn--block">Registrar àpat</button>
+  </div>
 
   <script src="js/data.js"></script>
   <script src="js/shared.js"></script>

@@ -8,13 +8,22 @@
    Pair de logo SnapEat + accions secundàries
    ============================================================ */
 
+/* Topbar estil iOS — sticky amb blur quan fa scroll (large-title simulat) */
 .app-topbar {
+  position: sticky;
+  top: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
-  padding: 4px 0;
-  margin-bottom: var(--space-4);
+  padding: var(--space-2) 0;
+  margin: 0 calc(var(--space-5) * -1) var(--space-4);
+  padding-left: var(--space-5);
+  padding-right: var(--space-5);
+  background-color: rgba(250, 250, 249, 0.85);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  z-index: 5;
 }
 
 .app-topbar .brand {
@@ -91,7 +100,7 @@
   margin-bottom: var(--space-3);
 }
 
-/* Empty state d'àpats del dia — visualment engaging, compacte */
+/* Empty state d'àpats del dia — iOS style: solid border soft, no dashed */
 .apat-empty {
   display: flex;
   flex-direction: column;
@@ -101,8 +110,9 @@
   gap: var(--space-2);
   padding: var(--space-5) var(--space-4);
   background-color: var(--color-surface);
-  border: 1.5px dashed var(--color-border-strong);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 .apat-empty__illustration {
@@ -186,30 +196,30 @@
 }
 
 /* ------------------------------------------------------------
-   Zona de foto — hero del registre, gran i atractiva
-   Dropzone ampla: mínim 220px d'alçada amb icona i text centrats
+   Zona de foto — hero del registre, estil iOS (solid, soft)
    ------------------------------------------------------------ */
 .foto-area {
   position: relative;
   width: 100%;
   min-height: 240px;
   aspect-ratio: 4 / 3;
-  background: var(--gradient-hero);
-  border: 2px dashed var(--color-brand);
+  background-color: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   cursor: pointer;
+  box-shadow: var(--shadow-sm);
   transition: border-color var(--duration-fast) var(--ease-in-out),
-              background var(--duration-fast) var(--ease-in-out),
+              background-color var(--duration-fast) var(--ease-in-out),
               transform var(--duration-fast) var(--ease-out);
 }
 
 .foto-area:hover {
-  border-color: var(--color-brand-hover);
-  background: var(--gradient-fresh);
+  border-color: var(--color-brand);
+  background-color: var(--color-brand-soft);
   transform: translateY(-1px);
 }
 
@@ -395,6 +405,61 @@
   padding-bottom: var(--space-1);
 }
 
+/* -------------------- Menu header amb pill de pressupost -------------------- */
+.menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.menu-header h2 {
+  margin: 0;
+}
+
+/* Budget pill — visible d'un cop d'ull, canvia color si s'apropa o supera */
+.budget-pill {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  padding: 6px var(--space-3);
+  background-color: var(--color-brand-soft);
+  color: var(--color-brand-dark);
+  border-radius: var(--radius-full);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-tight);
+  transition: background-color var(--duration-fast) var(--ease-in-out),
+              color var(--duration-fast) var(--ease-in-out);
+}
+
+.budget-pill__amount {
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-bold);
+}
+
+.budget-pill__sep {
+  opacity: 0.6;
+  font-weight: var(--font-weight-regular);
+}
+
+.budget-pill__budget {
+  opacity: 0.8;
+}
+
+.budget-pill--near {
+  background-color: var(--color-warn-bg);
+  color: var(--color-warn-fg);
+}
+
+.budget-pill--over {
+  background-color: rgba(220, 38, 38, 0.10);
+  color: var(--color-bad-fg);
+}
+
 /* -------------------- Secció: menú generat -------------------- */
 .week-grid {
   display: grid;
@@ -409,7 +474,7 @@
   }
 }
 
-/* Card de dia de la setmana — amb un color accent rotatiu */
+/* Card de dia de la setmana — iOS style: sense banda lateral, accent top prim */
 .week-day {
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -430,23 +495,11 @@
   box-shadow: var(--shadow-md);
 }
 
-/* Banda de color rotativa al costat esquerre */
-.week-day::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 4px;
-  background: var(--gradient-brand);
-}
-
-.week-day:nth-child(2n)::before {
-  background: var(--gradient-warm);
-}
-
-.week-day:nth-child(3n)::before {
-  background: var(--gradient-fresh);
+.week-day__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
 }
 
 .week-day__title {
@@ -455,8 +508,29 @@
   color: var(--color-text);
   letter-spacing: var(--tracking-tight);
   margin: 0;
-  padding-left: var(--space-2);
 }
+
+/* Mini-semàfor: 3 punts amb balanç nutricional del dia */
+.day-balance {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px var(--space-2);
+  background-color: var(--color-surface-subtle);
+  border-radius: var(--radius-full);
+}
+
+.day-balance__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+  box-shadow: inset 0 0 0 1px rgba(28, 25, 23, 0.08);
+}
+
+.day-balance__dot--ok   { background-color: var(--color-ok-accent); }
+.day-balance__dot--warn { background-color: var(--color-warn-accent); }
+.day-balance__dot--bad  { background-color: var(--color-bad-accent); }
 
 .week-day__meal {
   padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
@@ -535,35 +609,140 @@
   font-size: var(--font-size-small);
 }
 
-/* Modal de recepta — metadades i llista d'ingredients amb estils coherents */
-.recipe-modal__meta {
+/* -------------------- Bottom sheet de recepta -------------------- */
+.recipe-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: var(--space-4);
+}
+
+.recipe-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 4px var(--space-2);
+  background-color: var(--color-surface-subtle);
   color: var(--color-text-muted);
   font-size: var(--font-size-small);
-  margin: 0 0 var(--space-3);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+  border-radius: var(--radius-full);
+}
+
+.recipe-chip--dif {
+  background-color: var(--color-brand-soft);
+  color: var(--color-brand-dark);
+}
+
+.recipe-chip--price {
+  background-color: var(--color-accent-warm-soft);
+  color: #78350F;
+}
+
+.recipe-sheet__subtitle {
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  margin: var(--space-4) 0 var(--space-2);
+}
+
+.recipe-sheet__subtitle:first-of-type {
+  margin-top: var(--space-2);
+}
+
+.recipe-ing-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.recipe-ing {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--font-size-body);
+}
+
+.recipe-ing:last-child {
+  border-bottom: none;
+}
+
+.recipe-ing__name {
+  color: var(--color-text);
   font-weight: var(--font-weight-medium);
 }
 
-.recipe-modal__subtitle {
-  font-size: var(--font-size-body);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-  margin: 0 0 var(--space-2);
-}
-
-.recipe-modal__ingredients {
-  padding-left: var(--space-5);
-  margin: 0;
-  color: var(--color-text);
+.recipe-ing__qty {
+  color: var(--color-text-muted);
   font-size: var(--font-size-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.recipe-step-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: step;
+}
+
+.recipe-step {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  font-size: var(--font-size-body);
   line-height: var(--line-height-base);
+  color: var(--color-text);
 }
 
-.recipe-modal__ingredients li {
-  margin-bottom: 2px;
+.recipe-step + .recipe-step {
+  border-top: 1px solid var(--color-border);
 }
 
-/* Modal swap d'àpat — selecció entre 3 alternatives */
-.swap-options {
+.recipe-step__num {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background-color: var(--color-brand-soft);
+  color: var(--color-brand-dark);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-bold);
+}
+
+.recipe-step__text {
+  flex: 1;
+  padding-top: 3px;
+}
+
+/* Lead text dels bottom-sheets — to amable */
+.sheet-lead {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-base);
+  margin: 0 0 var(--space-3);
+}
+
+.sheet-lead strong {
+  color: var(--color-text);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Swap d'àpat + alternatives — selecció per radio amb cards clares */
+.swap-options,
+.alt-options {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -572,7 +751,8 @@
   margin: 0;
 }
 
-.swap-option {
+.swap-option,
+.alt-option {
   display: flex;
   align-items: flex-start;
   gap: var(--space-3);
@@ -584,66 +764,71 @@
               background-color var(--duration-fast) var(--ease-in-out);
 }
 
-.swap-option:hover {
+.swap-option:hover,
+.alt-option:hover {
   border-color: var(--color-border-strong);
   background-color: var(--color-surface-subtle);
 }
 
-.swap-option:has(input:checked) {
+.swap-option:has(input:checked),
+.alt-option:has(input:checked) {
   border-color: var(--color-brand);
   background-color: var(--color-brand-soft);
 }
 
-.swap-option input[type="radio"] {
+.swap-option input[type="radio"],
+.alt-option input[type="radio"] {
   margin-top: 3px;
   accent-color: var(--color-brand);
   flex-shrink: 0;
 }
 
-.swap-option__body {
+.swap-option__body,
+.alt-option__body {
   display: flex;
   flex-direction: column;
   gap: 2px;
   min-width: 0;
+  flex: 1;
 }
 
-.swap-option__name {
+.swap-option__name,
+.alt-option__name {
   font-size: var(--font-size-body);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text);
   line-height: var(--line-height-snug);
 }
 
-.swap-option__meta {
+.swap-option__meta,
+.alt-option__context {
   font-size: var(--font-size-small);
   color: var(--color-text-muted);
   font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-snug);
 }
 
-/* Utilitat: modal creat dinàmicament per JS (sense necessitat d'estils inline) */
-.modal--overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(28, 25, 23, 0.55);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+.alt-option__head {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-4);
-  z-index: var(--z-modal);
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2);
 }
 
-.modal--overlay .modal__dialog {
-  width: 100%;
-  max-width: 420px;
-  background-color: var(--color-surface);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-xl);
-  padding: var(--space-5);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
+.alt-option__price {
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-brand-dark);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+/* Shopping row — quantitat secundària */
+.shopping-row__qty {
+  color: var(--color-text-subtle);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-small);
+  margin-left: var(--space-1);
 }
 
 /* -------------------- Llista de compra -------------------- */
@@ -726,14 +911,14 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Mode compra — items grans i tàctils */
+/* Mode compra — items grans i tàctils amb check circular iOS */
 .compra-item {
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-4);
+  padding: var(--space-3) var(--space-4);
   background-color: var(--color-surface);
-  border: 1.5px solid var(--color-border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   margin-bottom: var(--space-2);
   min-height: 64px;
@@ -741,10 +926,76 @@
               border-color var(--duration-fast) var(--ease-in-out);
 }
 
-.compra-item[data-comprat="true"],
 .compra-item--done {
-  background-color: var(--color-ok-bg);
-  border-color: rgba(5, 150, 105, 0.2);
+  background-color: var(--color-brand-soft);
+  border-color: rgba(16, 185, 129, 0.20);
+}
+
+.compra-item__check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--touch-target-min);
+  min-height: var(--touch-target-min);
+  width: var(--touch-target-min);
+  height: var(--touch-target-min);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-border-strong);
+  background-color: var(--color-surface);
+  color: var(--color-text-subtle);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color var(--duration-fast) var(--ease-spring),
+              border-color var(--duration-fast) var(--ease-in-out),
+              transform var(--duration-fast) var(--ease-spring);
+}
+
+.compra-item__check:active {
+  transform: scale(0.9);
+}
+
+.compra-item__check--on {
+  background-color: var(--color-brand);
+  border-color: var(--color-brand);
+  color: #fff;
+}
+
+.compra-item__check svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+}
+
+.compra-item__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.compra-item__nom {
+  margin: 0;
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  line-height: var(--line-height-snug);
+}
+
+.compra-item--done .compra-item__nom {
+  text-decoration: line-through;
+  color: var(--color-text-muted);
+}
+
+.compra-item__meta {
+  margin: 2px 0 0;
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+}
+
+.compra-item__alt {
+  flex-shrink: 0;
+  font-size: var(--font-size-small);
+  padding: var(--space-1) var(--space-2);
+  min-height: var(--touch-target-min);
 }
 
 /* -------------------- Secció resum final -------------------- */
@@ -791,17 +1042,85 @@
   margin-top: var(--space-2);
 }
 
-/* Avatar del perfil */
+/* Avatar del perfil — iOS style: tint pla, sense gradient */
 .perfil-identitat {
   display: flex;
   align-items: center;
   gap: var(--space-4);
   padding: var(--space-4);
-  background: var(--gradient-hero);
-  border: 1px solid rgba(5, 150, 105, 0.15);
-  border-radius: var(--radius-xl);
-  margin-bottom: var(--space-6);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-5);
   box-shadow: var(--shadow-sm);
+}
+
+/* Separació consistent entre seccions del perfil (iOS grouped list) */
+.perfil-section {
+  margin-bottom: var(--space-5);
+}
+
+.perfil-section:last-child {
+  margin-bottom: 0;
+}
+
+.perfil-fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Checkbox del Perfil — estil row amb toggle a la dreta */
+.pref-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  cursor: pointer;
+}
+
+.pref-toggle {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--color-brand);
+  cursor: pointer;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+/* Input de pressupost inline al Perfil */
+.pref-budget-input {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.pref-budget-input input {
+  width: 4ch;
+  text-align: right;
+  border: none;
+  background: transparent;
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  padding: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.pref-budget-input input:focus {
+  outline: none;
+  color: var(--color-brand-dark);
+}
+
+.pref-budget-input input:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
 }
 
 .perfil-avatar {

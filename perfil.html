@@ -37,36 +37,54 @@
       </div>
     </div>
 
-    <section class="setmana-section" aria-labelledby="prefs-title">
-      <h2 id="prefs-title">Preferències alimentàries</h2>
-      <p class="hint">Ajusta les teves restriccions. <strong>Afectarà els pròxims menús setmanals.</strong></p>
-      <fieldset>
-        <legend class="visually-hidden">Restriccions</legend>
-        <div class="perfil-prefs-list">
-          <label class="checkbox-label"><input type="checkbox" id="pref-vegetaria"> Vegetarià/ana</label>
-          <label class="checkbox-label"><input type="checkbox" id="pref-sense-gluten"> Sense gluten</label>
-          <label class="checkbox-label"><input type="checkbox" id="pref-sense-lactosa"> Sense lactosa</label>
-        </div>
-      </fieldset>
+    <section class="perfil-section" aria-labelledby="prefs-title">
+      <h2 id="prefs-title" class="grouped-list-heading">Preferències alimentàries</h2>
+      <ul class="grouped-list" role="group" aria-labelledby="prefs-title">
+        <li class="grouped-list__item grouped-list__item--interactive">
+          <label class="pref-row">
+            <span class="grouped-list__label">Vegetarià/ana</span>
+            <input type="checkbox" id="pref-vegetaria" class="pref-toggle">
+          </label>
+        </li>
+        <li class="grouped-list__item grouped-list__item--interactive">
+          <label class="pref-row">
+            <span class="grouped-list__label">Sense gluten</span>
+            <input type="checkbox" id="pref-sense-gluten" class="pref-toggle">
+          </label>
+        </li>
+        <li class="grouped-list__item grouped-list__item--interactive">
+          <label class="pref-row">
+            <span class="grouped-list__label">Sense lactosa</span>
+            <input type="checkbox" id="pref-sense-lactosa" class="pref-toggle">
+          </label>
+        </li>
+      </ul>
+      <p class="grouped-list__hint">Afectarà els pròxims menús setmanals.</p>
     </section>
 
-    <section class="setmana-section" aria-labelledby="budget-default-title">
-      <h2 id="budget-default-title">Pressupost per defecte</h2>
-      <div class="budget-input-wrapper">
-        <label for="default-budget" class="label">Quantitat setmanal</label>
-        <div class="input-with-suffix">
-          <input type="number" id="default-budget" class="input-field" value="30" min="10" max="200">
-          <span class="input-suffix" aria-hidden="true">€ / setmana</span>
-        </div>
-      </div>
+    <section class="perfil-section" aria-labelledby="budget-default-title">
+      <h2 id="budget-default-title" class="grouped-list-heading">Pressupost per defecte</h2>
+      <ul class="grouped-list">
+        <li class="grouped-list__item">
+          <label for="default-budget" class="grouped-list__label">Quantitat setmanal</label>
+          <div class="pref-budget-input">
+            <input type="number" id="default-budget" value="30" min="10" max="200">
+            <span aria-hidden="true">€</span>
+          </div>
+        </li>
+      </ul>
     </section>
 
-    <section class="setmana-section" aria-labelledby="info-title">
-      <h2 id="info-title">Sobre SnapEat</h2>
-      <div class="about-card">
-        <p class="about-card__title">Prototip de recerca</p>
-        <p>Desenvolupat pel Grup B3 dins l'assignatura Factors Humans i Computació (UB, 25-26).</p>
-      </div>
+    <section class="perfil-section" aria-labelledby="info-title">
+      <h2 id="info-title" class="grouped-list-heading">Sobre SnapEat</h2>
+      <ul class="grouped-list">
+        <li class="grouped-list__item">
+          <div>
+            <p class="grouped-list__label" style="font-weight: var(--font-weight-semibold);">Prototip de recerca</p>
+            <p class="grouped-list__hint" style="padding: 2px 0 0;">Grup B3 · Factors Humans i Computació · UB 25-26</p>
+          </div>
+        </li>
+      </ul>
     </section>
   </main>
 

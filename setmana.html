@@ -14,7 +14,7 @@
 <body>
   <a href="#main-content" class="skip-link">Salta al contingut principal</a>
 
-  <main id="main-content" class="container" role="main">
+  <main id="main-content" class="container has-footer-cta" role="main">
     <div class="app-topbar">
       <a href="index.html" class="brand" aria-label="SnapEat — pàgina inicial">
         <span class="brand__logo" aria-hidden="true">
@@ -39,16 +39,16 @@
         </div>
         <p class="hint" id="budget-hint">Podràs ajustar-ho després.</p>
       </div>
-      <button type="button" id="btn-generar-menu" class="btn btn--primary btn--block">Generar menú setmanal</button>
     </section>
 
     <section id="section-menu" class="setmana-section" hidden aria-labelledby="menu-title">
-      <h2 id="menu-title">El teu menú</h2>
-      <p class="hint">Pressupost estimat: <strong id="menu-budget-total">—</strong></p>
+      <header class="menu-header">
+        <h2 id="menu-title">El teu menú</h2>
+        <div class="budget-pill" id="menu-budget-pill" aria-label="Pressupost estimat"></div>
+      </header>
       <div id="menu-setmanal" class="week-grid">
         <!-- Populated by setmana.js with 7 day cards -->
       </div>
-      <button type="button" id="btn-generar-llista" class="btn btn--primary btn--block">Perfecte! Generar llista de compra</button>
     </section>
 
     <section id="section-llista" class="setmana-section" hidden aria-labelledby="llista-title">
@@ -57,10 +57,6 @@
       <div id="llista-compra">
         <!-- Populated by setmana.js -->
       </div>
-      <button type="button" id="btn-anar-comprar" class="btn btn--primary btn--block">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-        Anar a comprar
-      </button>
     </section>
 
     <section id="section-compra" class="setmana-section" hidden aria-labelledby="compra-title">
@@ -70,14 +66,13 @@
           <p class="compra-status__count" aria-live="polite" id="compra-progress">0 de 0 productes</p>
           <p class="compra-status__amount" aria-live="polite" id="compra-amount">0 € de 0 €</p>
         </div>
-        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="compra-bar">
+        <div class="progress-bar" id="compra-bar">
           <div class="progress-bar__fill" id="compra-bar-fill"></div>
         </div>
       </div>
       <div id="productes-compra">
         <!-- Populated by setmana.js with bigger, touch-friendly items -->
       </div>
-      <button type="button" id="btn-acabar" class="btn btn--secondary btn--block">Compra feta</button>
     </section>
 
     <section id="section-resum" class="setmana-section" hidden aria-labelledby="resum-title">
@@ -88,33 +83,12 @@
           <div id="resum-progress" class="progress-bar__fill"></div>
         </div>
       </div>
-      <p class="banner">
+      <div class="banner">
         <span class="banner__icon" aria-hidden="true">✨</span>
-        <span class="banner__text">El teu menú setmanal està llest. Tens tot el que necessites per cuinar 7 dinars i 7 sopars aquesta setmana.</span>
-      </p>
+        <p class="banner__text">El teu menú setmanal està llest. Tens tot el que necessites per cuinar 7 dinars i 7 sopars aquesta setmana.</p>
+      </div>
       <a href="index.html" class="btn btn--primary btn--block">Tornar al dashboard</a>
     </section>
-
-    <template id="alternativa-template">
-      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        <div class="modal__content">
-          <h2 id="modal-title">Necessites una alternativa?</h2>
-          <fieldset>
-            <legend class="label">Quin és el motiu?</legend>
-            <label><input type="radio" name="motiu" value="car" checked> Massa car</label>
-            <label><input type="radio" name="motiu" value="no-n-hi-ha"> No n'hi ha</label>
-            <label><input type="radio" name="motiu" value="altre"> Altre motiu</label>
-          </fieldset>
-          <div class="alternativas-list">
-            <!-- Populated by JS with 2-3 alternative products -->
-          </div>
-          <div class="modal__actions">
-            <button type="button" class="btn btn--ghost" data-action="cancelar">Cancel·lar</button>
-            <button type="button" class="btn btn--primary" data-action="confirmar">Triar alternativa</button>
-          </div>
-        </div>
-      </div>
-    </template>
   </main>
 
   <nav class="tab-bar" aria-label="Navegació principal">
@@ -132,9 +106,9 @@
     </a>
   </nav>
 
-  <a href="registrar.html" class="fab" id="fab-registrar" aria-label="Registrar nou àpat">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-  </a>
+  <div class="footer-cta footer-cta--above-tabs" id="sticky-cta">
+    <button type="button" id="sticky-cta-btn" class="btn btn--primary btn--block">Generar menú setmanal</button>
+  </div>
 
   <script src="js/data.js"></script>
   <script src="js/shared.js"></script>

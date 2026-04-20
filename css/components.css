@@ -665,10 +665,10 @@ select.input-field {
   margin-top: 2px;
 }
 
-/* -------------------- Modificador: OK -------------------- */
+/* -------------------- Modificador: OK (iOS tint) -------------------- */
 .semafor-cell--ok {
-  background-color: var(--color-ok-bg);
-  border-color: rgba(5, 150, 105, 0.25);
+  background-color: var(--color-ok-tint);
+  border-color: rgba(5, 150, 105, 0.18);
   color: var(--color-ok-accent);
 }
 
@@ -680,10 +680,10 @@ select.input-field {
   color: var(--color-ok-fg);
 }
 
-/* -------------------- Modificador: warn -------------------- */
+/* -------------------- Modificador: warn (iOS tint) -------------------- */
 .semafor-cell--warn {
-  background-color: var(--color-warn-bg);
-  border-color: rgba(217, 119, 6, 0.25);
+  background-color: var(--color-warn-tint);
+  border-color: rgba(217, 119, 6, 0.18);
   color: var(--color-warn-accent);
 }
 
@@ -695,10 +695,10 @@ select.input-field {
   color: var(--color-warn-fg);
 }
 
-/* -------------------- Modificador: bad -------------------- */
+/* -------------------- Modificador: bad (iOS tint) -------------------- */
 .semafor-cell--bad {
-  background-color: var(--color-bad-bg);
-  border-color: rgba(220, 38, 38, 0.25);
+  background-color: var(--color-bad-tint);
+  border-color: rgba(220, 38, 38, 0.18);
   color: var(--color-bad-accent);
 }
 
@@ -1030,6 +1030,249 @@ select.input-field {
   flex-direction: column;
   gap: var(--space-3);
   padding: 0;
+  margin: 0;
+}
+
+/* ============================================================
+   BOTTOM SHEET — estil iOS native (Reminders, Health, Maps)
+   Panell que llisca des de baix, amb drag handle + backdrop blur
+   ============================================================ */
+
+.bottom-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.bottom-sheet__backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(28, 25, 23, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0;
+  transition: opacity var(--duration-base) var(--ease-in-out);
+  pointer-events: auto;
+}
+
+.bottom-sheet__panel {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface);
+  border-top-left-radius: var(--radius-xl);
+  border-top-right-radius: var(--radius-xl);
+  box-shadow: 0 -12px 30px -12px rgba(28, 25, 23, 0.18);
+  transform: translateY(100%);
+  transition: transform var(--duration-slow) var(--ease-spring);
+  pointer-events: auto;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  overflow: hidden;
+}
+
+.bottom-sheet--visible .bottom-sheet__backdrop { opacity: 1; }
+.bottom-sheet--visible .bottom-sheet__panel { transform: translateY(0); }
+
+.bottom-sheet__handle {
+  width: 36px;
+  height: 4px;
+  background-color: var(--color-border-strong);
+  border-radius: var(--radius-full);
+  margin: var(--space-2) auto var(--space-1);
+  flex-shrink: 0;
+}
+
+.bottom-sheet__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-5) var(--space-2);
+  flex-shrink: 0;
+}
+
+.bottom-sheet__title {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--line-height-snug);
+  color: var(--color-text);
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.bottom-sheet__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  border: none;
+  background-color: var(--color-surface-subtle);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color var(--duration-fast) var(--ease-in-out),
+              color var(--duration-fast) var(--ease-in-out);
+}
+
+.bottom-sheet__close:hover {
+  background-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.bottom-sheet__close svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.5;
+}
+
+.bottom-sheet__body {
+  padding: var(--space-3) var(--space-5) var(--space-5);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  flex: 1;
+  min-height: 0;
+}
+
+.bottom-sheet__footer {
+  padding: var(--space-3) var(--space-5) var(--space-4);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  gap: var(--space-2);
+  flex-shrink: 0;
+  background-color: var(--color-surface);
+}
+
+.bottom-sheet__footer .btn {
+  flex: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bottom-sheet__panel,
+  .bottom-sheet__backdrop {
+    transition-duration: 0.01ms;
+  }
+}
+
+/* ============================================================
+   STICKY FOOTER CTA — botó fixe al footer amb blur (iOS style)
+   Usat a pantalles d'acció principal (registrar, setmana)
+   ============================================================ */
+
+.footer-cta {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: var(--space-3) var(--space-4) calc(var(--space-3) + env(safe-area-inset-bottom, 0));
+  background-color: rgba(255, 255, 255, 0.92);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-top: 1px solid rgba(231, 229, 228, 0.6);
+  z-index: calc(var(--z-tab-bar) - 1);
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* Quan la pantalla té tab-bar, la CTA queda per sobre */
+.footer-cta--above-tabs {
+  bottom: var(--tab-bar-height);
+}
+
+.footer-cta .btn {
+  flex: 1;
+}
+
+/* Quan la pantalla té footer-cta, el container necessita padding extra */
+.has-footer-cta {
+  padding-bottom: calc(90px + env(safe-area-inset-bottom, 0)) !important;
+}
+
+.has-footer-cta.has-tab-bar,
+.container.has-footer-cta {
+  padding-bottom: calc(var(--tab-bar-height) + 90px + env(safe-area-inset-bottom, 0)) !important;
+}
+
+/* ============================================================
+   GROUPED INSET LIST — patró iOS Settings
+   Cards rodones amb dividers prims entre ítems
+   ============================================================ */
+
+.grouped-list {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.grouped-list__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  min-height: 52px;
+  border-bottom: 1px solid var(--color-border);
+  background-color: transparent;
+  transition: background-color var(--duration-fast) var(--ease-in-out);
+}
+
+.grouped-list__item:last-child {
+  border-bottom: none;
+}
+
+.grouped-list__item--interactive {
+  cursor: pointer;
+}
+
+.grouped-list__item--interactive:hover,
+.grouped-list__item--interactive:focus-within {
+  background-color: var(--color-surface-subtle);
+}
+
+.grouped-list__label {
+  flex: 1;
+  font-size: var(--font-size-body);
+  color: var(--color-text);
+  font-weight: var(--font-weight-regular);
+  margin: 0;
+}
+
+.grouped-list__value {
+  font-size: var(--font-size-body);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.grouped-list__hint {
+  font-size: var(--font-size-small);
+  color: var(--color-text-subtle);
+  padding: var(--space-2) var(--space-1) 0;
+  margin: 0;
+  line-height: var(--line-height-snug);
+}
+
+/* Section header iOS-style per a grouped-list */
+.grouped-list-heading {
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  padding: 0 var(--space-1) var(--space-2);
   margin: 0;
 }
 

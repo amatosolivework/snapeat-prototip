@@ -20,6 +20,13 @@
   --color-ok-accent: #059669;
   --color-ok-fg: #065F46;
 
+  /* Tints subtils estil iOS — per a surfaces grans tipus semàfor, on els
+     backgrounds plens dels tokens *-bg queden massa saturats. Mantenim color
+     però baixem opacitat perquè el content respiri. */
+  --color-bad-tint: rgba(220, 38, 38, 0.08);
+  --color-warn-tint: rgba(217, 119, 6, 0.10);
+  --color-ok-tint: rgba(5, 150, 105, 0.10);
+
   /* Color d'accent de marca — verd càlid, no agressiu */
   --color-brand: #10B981;
   --color-brand-hover: #059669;
