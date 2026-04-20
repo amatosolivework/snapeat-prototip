@@ -231,7 +231,7 @@
 .fab {
   position: fixed;
   right: var(--space-4);
-  bottom: calc(var(--tab-bar-height) + var(--space-4) + env(safe-area-inset-bottom, 0px));
+  bottom: calc(var(--tab-bar-height) + var(--space-5) + env(safe-area-inset-bottom, 0px));
   width: var(--fab-size);
   height: var(--fab-size);
   display: inline-flex;
@@ -296,20 +296,24 @@
    TAB BAR — barra de navegació fixa inferior amb indicador actiu
    ============================================================ */
 
+/* Tab-bar flotant estil iOS 17+ liquid — càpsula amb marge + blur */
 .tab-bar {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  left: var(--space-4);
+  right: var(--space-4);
+  bottom: calc(var(--space-3) + env(safe-area-inset-bottom, 0));
   display: flex;
   align-items: stretch;
-  background-color: rgba(255, 255, 255, 0.96);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border-top: 1px solid var(--color-border);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background-color: rgba(255, 255, 255, 0.88);
+  backdrop-filter: saturate(180%) blur(24px);
+  -webkit-backdrop-filter: saturate(180%) blur(24px);
+  border: 1px solid rgba(231, 229, 228, 0.6);
+  border-radius: var(--radius-full);
+  box-shadow: 0 12px 32px -10px rgba(28, 25, 23, 0.18),
+              0 4px 12px -4px rgba(28, 25, 23, 0.08);
   min-height: var(--tab-bar-height);
   z-index: var(--z-tab-bar);
+  padding: 6px;
 }
 
 .tab {
@@ -319,8 +323,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  min-height: var(--tab-bar-height);
+  gap: 2px;
+  min-height: calc(var(--tab-bar-height) - 12px);
   padding: var(--space-2) var(--space-1);
   color: var(--color-text-subtle);
   font-size: var(--font-size-micro);
@@ -329,8 +333,10 @@
   text-align: center;
   background: transparent;
   border: none;
+  border-radius: var(--radius-full);
   cursor: pointer;
-  transition: color var(--duration-fast) var(--ease-in-out);
+  transition: color var(--duration-fast) var(--ease-in-out),
+              background-color var(--duration-fast) var(--ease-in-out);
 }
 
 .tab__icon {
@@ -352,30 +358,17 @@
   color: var(--color-text);
 }
 
-/* Tab actiu: color de marca + barra superior + icona més gruixuda */
+/* Tab actiu dins la càpsula: pill subtil de brand-soft al fons */
 .tab[aria-current="page"],
 .tab--active {
-  color: var(--color-brand-hover);
+  color: var(--color-brand-dark);
   font-weight: var(--font-weight-semibold);
+  background-color: var(--color-brand-soft);
 }
 
 .tab[aria-current="page"] .tab__icon,
 .tab--active .tab__icon {
   stroke-width: 2.25;
-  transform: translateY(-2px);
-}
-
-.tab[aria-current="page"]::before,
-.tab--active::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 28px;
-  height: 3px;
-  background: var(--gradient-brand);
-  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
 }
 
 /* ============================================================
@@ -1183,29 +1176,58 @@ select.input-field {
   display: flex;
   gap: var(--space-2);
   pointer-events: none;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity var(--duration-base) var(--ease-out),
+              transform var(--duration-base) var(--ease-out);
 }
 
-/* Quan la pantalla té tab-bar, la CTA queda per sobre */
+/* Estat ocult — s'usa a registrar quan no hi ha foto o nom encara */
+.footer-cta--hidden {
+  opacity: 0;
+  transform: translateY(24px);
+  pointer-events: none;
+}
+
+.footer-cta--hidden .btn {
+  pointer-events: none;
+}
+
+/* Quan la pantalla té tab-bar flotant, la CTA queda per sobre amb gap */
 .footer-cta--above-tabs {
-  bottom: calc(var(--tab-bar-height) + var(--space-2));
+  bottom: calc(var(--tab-bar-height) + var(--space-5) + env(safe-area-inset-bottom, 0));
+  padding-bottom: 0;
+  /* Marge lateral perquè sigui estrictament més estret que el tab-bar (jerarquia) */
+  padding-left: var(--space-7);
+  padding-right: var(--space-7);
 }
 
-/* El botó sí té pointer-events i la seva shadow marcada perquè "flota" */
+/* CTA flotant: shadow present però MENYS marcada que la del tab-bar per jerarquia */
 .footer-cta .btn {
   flex: 1;
   pointer-events: auto;
+  min-height: 44px;
+  font-size: var(--font-size-small);
+  box-shadow: 0 6px 16px -6px rgba(16, 185, 129, 0.30),
+              0 2px 6px -2px rgba(28, 25, 23, 0.10);
+}
+
+/* A la pantalla de registrar (sense tab-bar), el CTA és l'acció principal — més prominent */
+.footer-cta:not(.footer-cta--above-tabs) .btn {
+  min-height: 52px;
+  font-size: var(--font-size-body);
   box-shadow: 0 10px 25px -8px rgba(16, 185, 129, 0.35),
               0 4px 10px -4px rgba(28, 25, 23, 0.15);
 }
 
-/* Quan la pantalla té footer-cta, el container necessita padding extra */
-.has-footer-cta {
-  padding-bottom: calc(90px + env(safe-area-inset-bottom, 0)) !important;
+/* Container amb footer-cta + tab-bar (ex: setmana): padding per als dos */
+.container.has-footer-cta {
+  padding-bottom: calc(var(--tab-bar-height) + var(--space-5) + 80px + env(safe-area-inset-bottom, 0)) !important;
 }
 
-.has-footer-cta.has-tab-bar,
-.container.has-footer-cta {
-  padding-bottom: calc(var(--tab-bar-height) + 90px + env(safe-area-inset-bottom, 0)) !important;
+/* Container amb footer-cta sense tab-bar (ex: registrar): només CTA */
+.container.container--no-tabs.has-footer-cta {
+  padding-bottom: calc(80px + env(safe-area-inset-bottom, 0)) !important;
 }
 
 /* ============================================================

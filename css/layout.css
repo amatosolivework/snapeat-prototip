@@ -11,9 +11,14 @@
   max-width: var(--container-max-mobile);
   margin-inline: auto;
   padding-inline: var(--space-5);
-  /* Marge inferior generós: tab bar (72px) + fab (60px) + respir extra (48px) */
-  padding-bottom: calc(var(--tab-bar-height) + var(--fab-size) + var(--space-5));
+  /* Marge inferior per a tab-bar flotant (header + gap + safe-area) + respir */
+  padding-bottom: calc(var(--tab-bar-height) + var(--space-3) + var(--space-5) + env(safe-area-inset-bottom, 0));
   padding-top: var(--space-5);
+}
+
+/* Pantalles sense tab-bar (ex: registrar) — padding inferior menor */
+.container--no-tabs {
+  padding-bottom: calc(var(--space-5) + env(safe-area-inset-bottom, 0));
 }
 
 @media (min-width: 640px) {

@@ -40,8 +40,18 @@
     const extraCustom = document.getElementById('extra-custom');
     const btnRegistrar = document.getElementById('btn-registrar');
     const btnCancelar = document.getElementById('btn-cancelar');
+    const footerCta = document.getElementById('footer-cta');
 
     if (!form || !detectInput) return;
+
+    // El CTA només apareix quan hi ha foto I nom (manual o autodetectat).
+    // Si falta qualsevol dels dos, es manté amagat — evitem clics ambigus.
+    function updateCtaVisibility() {
+      if (!footerCta) return;
+      const hasPhoto = !!state.photoDataUrl;
+      const hasName = (detectInput.value || '').trim().length > 0;
+      footerCta.classList.toggle('footer-cta--hidden', !(hasPhoto && hasName));
+    }
 
     // Mode edició?
     const params = new URLSearchParams(location.search);
@@ -67,6 +77,9 @@
       }
     }
 
+    // Inicialitzem la visibilitat del CTA: en mode edició ja tindrà els 2 camps.
+    updateCtaVisibility();
+
     // Foto — previsualització on change.
     if (photoInput) {
       photoInput.addEventListener('change', function (e) {
@@ -86,10 +99,14 @@
             detectInput.value = MOCK_DETECTIONS[idx];
             shared.showToast('He detectat: ' + MOCK_DETECTIONS[idx], 'info');
           }
+          updateCtaVisibility();
         };
         reader.readAsDataURL(file);
       });
     }
+
+    // Input del nom — actualitzem la visibilitat del CTA a cada tecla.
+    detectInput.addEventListener('input', updateCtaVisibility);
 
     // Chips — toggle amb aria-pressed.
     if (extrasChips) {
