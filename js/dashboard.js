@@ -185,15 +185,15 @@
     // Macro chips amb inicial visible (H/V/P) + nom + color d'estat.
     const ind = m.indicadors || data.analyzeMeal(m.nom || '');
     const chipDefs = [
-      { key: 'hidrats', initial: 'H', label: 'Hidrats' },
-      { key: 'verdures', initial: 'V', label: 'Verdures' },
-      { key: 'proteina', initial: 'P', label: 'Proteïna' }
+      { key: 'hidrats', initial: 'H', label: 'Hidrats', shortLabel: 'Hidrats' },
+      { key: 'verdures', initial: 'V', label: 'Verdures', shortLabel: 'Verd.' },
+      { key: 'proteina', initial: 'P', label: 'Proteïna', shortLabel: 'Prot.' }
     ];
     const chips = chipDefs.map(function (c) {
       const st = ind[c.key] || 'bad';
       return '<span class="chip-macro chip-macro--' + st + '" aria-label="' + shared.escapeAttr(c.label + ': ' + st) + '">' +
         '<span class="chip-macro__initial" aria-hidden="true">' + c.initial + '</span>' +
-        '<span class="chip-macro__label">' + escapeHtml(c.label) + '</span>' +
+        '<span class="chip-macro__label">' + escapeHtml(c.shortLabel) + '</span>' +
       '</span>';
     }).join('');
 
