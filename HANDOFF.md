@@ -9,10 +9,9 @@
 
 ### Dashboard (`index.html`)
 - Topbar brand inline (no sticky bar amb blur).
-- Semàfor de 3 cèl·lules amb **tints subtils** (rgba 8-10%) i microcopy forward-looking.
-- Hints propositius sota cada cèl·la quan no està en OK ("Un bol d'arròs o pasta", "Un grapat d'enciam o bròquil").
-- Banner Coach amb suggeriment dinàmic.
-- **Àpat hero card**: foto 16:10 full-width al top, hora overlay blur top-right, nom H3 bold, extras amb separador ·, chips macro H/V/P amb cercle de color + etiqueta (`chip-macro--ok/warn/bad`).
+- Semàfor de 3 cèl·lules **estil Apple Health**: cards blanques neutres, ring circular amb tint (12%/12%/10%) i SVG Lucide al centre (wheat/leaf/egg), label + status + pill d'estat (`OK` / `Atent` / `Millora`) al fons. Labels i status alineats a la mateixa Y.
+- Banner Coach amb suggeriment dinàmic (icona SVG lightbulb).
+- **Àpat hero card**: foto 16:10 full-width al top, hora overlay blur top-right, nom H3 bold, extras amb separador ·, **chips macro H/V/P compactes en 1 sola fila** amb cercle de color + etiqueta curta (`Hidrats` / `Verd.` / `Prot.`). Aria-label conserva el nom complet.
 - Empty state amb CTA directe "Fer foto" enllaçant a registrar.
 - FAB visible sempre (excepte amb teclat obert).
 - Tab-bar flotant càpsula a baix.
@@ -82,6 +81,7 @@
 | 5 | PWA nav | Interceptor de links en mode standalone iOS | `f808a75` |
 | 6 | Toasts | Pill top-center Live Activity, no apilats | `a1b45a8` |
 | 7 | Flow horitzontal | Slide entre 5 steps setmana, hero àpat, H/V/P labels, scroll hide CTA | `ca15875` |
+| 8 | Redisseny Avui | Semàfor Apple Health (cards neutres + ring + pill OK/Atent/Millora), chips H/V/P en 1 fila, icones SVG Lucide, alineació per dalt, aria-labels amb sufix Coach | `e5abff3` |
 
 ## Captures de referència
 
