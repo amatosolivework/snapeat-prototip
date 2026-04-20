@@ -20,12 +20,11 @@
     proteina: { ok: 'Proteïna al punt', warn: 'Una mica baixa', bad: 'Afegeix un ou o iogurt' }
   };
 
-  // Pista breu sota cada cèl·lula: un gest concret per tancar la bretxa.
-  // Només es mostra quan l'estat no és 'ok'.
-  const STATUS_HINT = {
-    hidrats: { warn: 'Prova amanida al sopar', bad: 'Un bol d\'arròs o pasta' },
-    verdures: { warn: 'Una amanida al sopar', bad: 'Un grapat d\'enciam o bròquil' },
-    proteina: { warn: 'Un iogurt al matí', bad: 'Ou, tonyina o cigrons' }
+  // Etiqueta curta de la pill d'estat. To Coach: "Millora" és proactiu, no punitiu.
+  const STATUS_PILL_LABEL = {
+    ok: 'OK',
+    warn: 'Atent',
+    bad: 'Millora'
   };
 
   // Icones SVG (Lucide) per a cada categoria. Es renderitzen com a HTML cru dins
@@ -89,21 +88,26 @@
     el.innerHTML = cells.map(function (c) { return cellHtml(c, agg[c.key]); }).join('');
   }
 
+  // Sufix breu per a aria-label quan l'estat no és ok.
+  // Garanteix que lectors de pantalla rebin sempre un missatge proactiu,
+  // fins i tot si el banner Coach estigués amagat per algun motiu futur.
+  const ARIA_COACH_SUFFIX = {
+    warn: '. Un petit ajust ho arregla.',
+    bad: '. Pots millorar-ho.'
+  };
+
   function cellHtml(cell, state) {
     const safeState = (state === 'ok' || state === 'warn' || state === 'bad') ? state : 'bad';
     const statusText = STATUS_TEXT[cell.key][safeState];
-    const icon = CATEGORY_ICON[cell.key] || '•';
-    const hint = safeState !== 'ok' && STATUS_HINT[cell.key] ? STATUS_HINT[cell.key][safeState] : '';
-    const hintHtml = hint
-      ? '<p class="semafor-cell__hint">' + escapeHtml(hint) + '</p>'
-      : '';
-    const ariaLabel = cell.label + ': ' + statusText + (hint ? '. ' + hint : '');
+    const iconHtml = CATEGORY_ICON[cell.key] || '';
+    const pillLabel = STATUS_PILL_LABEL[safeState];
+    const ariaLabel = cell.label + ': ' + statusText + (ARIA_COACH_SUFFIX[safeState] || '');
     return '' +
-      '<article class="semafor-cell semafor-cell--' + safeState + '" aria-label="' + shared.escapeAttr(ariaLabel) + '">' +
-        '<span class="semafor-cell__icon" aria-hidden="true">' + icon + '</span>' +
+      '<article class="semafor-cell" aria-label="' + shared.escapeAttr(ariaLabel) + '">' +
+        '<span class="semafor-cell__ring semafor-cell__ring--' + safeState + '" aria-hidden="true">' + iconHtml + '</span>' +
         '<h3 class="semafor-cell__label">' + escapeHtml(cell.label) + '</h3>' +
         '<p class="semafor-cell__status">' + escapeHtml(statusText) + '</p>' +
-        hintHtml +
+        '<span class="semafor-cell__pill semafor-cell__pill--' + safeState + '">' + escapeHtml(pillLabel) + '</span>' +
       '</article>';
   }
 
