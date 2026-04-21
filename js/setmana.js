@@ -604,10 +604,7 @@
         bar.classList.remove('progress-bar--warn', 'progress-bar--over');
         if (gastat > budget) bar.classList.add('progress-bar--over');
         else if (pct >= 80) bar.classList.add('progress-bar--warn');
-        bar.setAttribute('role', 'progressbar');
         bar.setAttribute('aria-valuenow', String(pct));
-        bar.setAttribute('aria-valuemin', '0');
-        bar.setAttribute('aria-valuemax', '100');
       }
     }
 

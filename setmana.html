@@ -79,7 +79,7 @@
               <p class="compra-status__count" aria-live="polite" id="compra-progress">0 de 0 productes</p>
               <p class="compra-status__amount" aria-live="polite" id="compra-amount">0 € de 0 €</p>
             </div>
-            <div class="progress-bar" id="compra-bar">
+            <div class="progress-bar" id="compra-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progrés del pressupost de compra">
               <div class="progress-bar__fill" id="compra-bar-fill"></div>
             </div>
           </div>
@@ -92,7 +92,7 @@
           <h2 id="resum-title" class="visually-hidden">Compra completada</h2>
           <div class="resum-budget">
             <p class="resum-amount"><span id="resum-gastat">—</span> de <span id="resum-total">—</span></p>
-            <div class="progress-bar">
+            <div class="progress-bar" id="resum-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Resum del pressupost gastat">
               <div id="resum-progress" class="progress-bar__fill"></div>
             </div>
           </div>
