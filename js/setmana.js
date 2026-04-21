@@ -622,6 +622,7 @@
     if (refs.budgetInput) refs.budgetInput.value = data.getBudget();
     // Neteja render fantasma al flow-track per no veure contingut vell quan llisquem.
     if (refs.menuSetmanal) refs.menuSetmanal.innerHTML = '';
+    if (refs.menuBudgetPill) refs.menuBudgetPill.innerHTML = '';
     if (refs.llistaCompra) refs.llistaCompra.innerHTML = '';
     if (refs.productesCompra) refs.productesCompra.innerHTML = '';
     goToStep('pressupost');
