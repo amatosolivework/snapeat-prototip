@@ -109,4 +109,38 @@
 
 ---
 
+## Validacions WCAG AA (2026-04-21)
+
+Auditoria executada com a tasques T18-T22 del pla a `docs/plans/2026-04-21-auditoria-wcag-aa.md`.
+
+### Verificades via code audit
+
+- ✓ Contrast AA (4.5:1 text, 3:1 components) a totes les combinacions text/fons dels tints (pills, chips-macro, toasts, banner). Veure `docs/audits/2026-04-21-contrast-results.md`. 16/16 parells passen AA, 4/16 passen AAA.
+- ✓ `prefers-reduced-motion` respectat a les 31 animacions i transicions del prototip. Reset global a `base.css:217-226` + 4 overrides específics addicionals. Veure `docs/audits/2026-04-21-reduced-motion.md`.
+- ✓ Semàntica ARIA: `role="dialog"` + focus trap al bottom-sheet (T8) i al confirm modal (T10). Toasts amb `role="status"` + `aria-live="polite"` + `aria-atomic="true"` (des de commit `a1b45a8`).
+- ✓ Progressbars (compra + resum) amb `role="progressbar"` + valuemin/max al HTML (T2).
+- ✓ Chips-macro aria-label en català usant STATUS_TEXT (T1).
+- ✓ Skip-link amb `<main tabindex="-1">` a les 4 pantalles (T11).
+- ✓ Chips a 44px per compliment AAA 2.5.5 Target Size (T12).
+
+### Pendents de validació manual
+
+- ☐ **Lighthouse Accessibility ≥ 95** a les 4 pantalles. Template a `docs/audits/2026-04-21-lighthouse-axe.md`.
+- ☐ **axe DevTools: 0 errors critical + 0 serious** a les 4 pantalles. Mateix document.
+- ☐ **VoiceOver checkpoint** (E1-E10). Checklist a `docs/audits/2026-04-21-voiceover.md`.
+
+### Cicle del flow setmana
+
+- ✓ Detecció automàtica de setmana completada al reobrir la pantalla (T4).
+- ✓ CTA "Planificar una setmana nova" al resum (T5) que reseteja via `data.resetWeekCycle`.
+- ✓ Validació "Compra feta" requereix almenys 1 ítem marcat (T6).
+- ✓ Back button amagat al resum (T7).
+
+### Integritat al test real
+
+- ✓ Compressió d'imatge via canvas (1024×1024, JPEG 0.7) abans de persistir (T3).
+- ✓ Gestió d'error de quota al `save()` propaga a `addMeal` i `updateMeal`.
+
+---
+
 **Última verificació**: `main-final.pdf` compila net (34 pàgines). Deploy GitHub Pages OK a `amatosolivework.github.io/snapeat-prototip/`.
