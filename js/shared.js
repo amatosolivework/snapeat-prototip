@@ -241,19 +241,20 @@ window.SnapEat.shared = (function () {
 
   function bottomSheet(config) {
     const cfg = config || {};
-    const titleId = 'bs-title-' + Math.floor(Math.random() * 1e6);
+    const titleId = 'bs-title-' + Date.now() + '-' + Math.floor(Math.random() * 10000);
+    const opener = document.activeElement;
 
     const root = document.createElement('div');
     root.className = 'bottom-sheet';
-    root.setAttribute('role', 'dialog');
-    root.setAttribute('aria-modal', 'true');
-    root.setAttribute('aria-labelledby', titleId);
 
     const backdrop = document.createElement('div');
     backdrop.className = 'bottom-sheet__backdrop';
 
     const panel = document.createElement('div');
     panel.className = 'bottom-sheet__panel';
+    panel.setAttribute('role', 'dialog');
+    panel.setAttribute('aria-modal', 'true');
+    panel.setAttribute('aria-labelledby', titleId);
 
     // Drag handle (decoratiu, però també tap-target per tancar amb gestos futurs)
     const handle = document.createElement('div');
@@ -305,7 +306,6 @@ window.SnapEat.shared = (function () {
     root.appendChild(backdrop);
     root.appendChild(panel);
 
-    const previousFocus = document.activeElement;
     document.body.appendChild(root);
     document.body.style.overflow = 'hidden';
 
@@ -315,6 +315,8 @@ window.SnapEat.shared = (function () {
     /* eslint-enable no-unused-expressions */
     root.classList.add('bottom-sheet--visible');
 
+    const focusableSelector = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
     function close() {
       root.classList.remove('bottom-sheet--visible');
       document.removeEventListener('keydown', onKey);
@@ -323,14 +325,30 @@ window.SnapEat.shared = (function () {
       setTimeout(function () {
         if (root.parentNode) root.parentNode.removeChild(root);
       }, 320);
-      if (previousFocus && previousFocus.focus) {
-        try { previousFocus.focus(); } catch (e) { /* ignore */ }
+      if (opener && typeof opener.focus === 'function') {
+        try { opener.focus(); } catch (e) { /* ignore */ }
       }
       if (typeof cfg.onClose === 'function') cfg.onClose();
     }
 
+    function trapFocus(e) {
+      if (e.key !== 'Tab') return;
+      const focusables = panel.querySelectorAll(focusableSelector);
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
     function onKey(e) {
-      if (e.key === 'Escape') { e.preventDefault(); close(); }
+      if (e.key === 'Escape') { e.preventDefault(); close(); return; }
+      trapFocus(e);
     }
 
     closeBtn.addEventListener('click', close);
@@ -354,11 +372,11 @@ window.SnapEat.shared = (function () {
       });
     }
 
-    // Primer focus al primer botó d'acció o al close.
+    // Focus inicial al primer element interactiu del panel (~50ms per deixar animar).
     setTimeout(function () {
-      const firstAction = footer && footer.querySelector('.btn');
-      (firstAction || closeBtn).focus();
-    }, 100);
+      const first = panel.querySelector(focusableSelector);
+      if (first) first.focus();
+    }, 50);
 
     return close;
   }
