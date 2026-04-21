@@ -67,6 +67,7 @@
     refs.compraAmount = document.getElementById('compra-amount');
     refs.compraBar = document.getElementById('compra-bar');
     refs.compraBarFill = document.getElementById('compra-bar-fill');
+    refs.resumBar = document.getElementById('resum-bar');
     refs.resumGastat = document.getElementById('resum-gastat');
     refs.resumTotal = document.getElementById('resum-total');
     refs.resumProgress = document.getElementById('resum-progress');
@@ -133,6 +134,10 @@
     refs.stickyCtaBtn.onclick = handlers[step] || null;
   }
 
+  function isWeekCompleted(list) {
+    return Array.isArray(list) && list.length > 0 && list.every(function (i) { return i.comprat; });
+  }
+
   // ------------------------------
   //  Init
   // ------------------------------
@@ -160,12 +165,13 @@
     if (savedPlan) renderWeekPlan(savedPlan);
     if (savedList && savedList.length) renderShoppingList(savedList);
 
-    const params = new URLSearchParams(location.search);
-    if (params.get('mode') === 'compra' && savedList && savedList.length) {
+    if (isWeekCompleted(savedList)) {
+      renderModeCompra(savedList);
+      renderResum(savedList);
+      goToStep('resum', { skipScroll: true });
+    } else if (savedList && savedList.length) {
       renderModeCompra(savedList);
       goToStep('compra', { skipScroll: true });
-    } else if (savedList && savedList.length) {
-      goToStep('llista', { skipScroll: true });
     } else if (savedPlan) {
       goToStep('menu', { skipScroll: true });
     } else {
@@ -589,25 +595,25 @@
   //  Pas 4: Resum final
   // ------------------------------
 
-  function onAcabar() {
-    const list = data.getShoppingList();
+  function renderResum(list) {
     const gastat = list.filter(function (i) { return i.comprat; }).reduce(function (s, i) { return s + (Number(i.preuAprox) || 0); }, 0);
     const budget = data.getBudget();
 
     if (refs.resumGastat) refs.resumGastat.textContent = formatPrice(gastat);
     if (refs.resumTotal) refs.resumTotal.textContent = formatPrice(budget);
-    if (refs.resumProgress) {
+    if (refs.resumBar && refs.resumProgress) {
       const pct = budget > 0 ? Math.min(100, Math.round((gastat / budget) * 100)) : 0;
       refs.resumProgress.style.width = pct + '%';
-      const bar = refs.resumProgress.parentNode;
-      if (bar) {
-        bar.classList.remove('progress-bar--warn', 'progress-bar--over');
-        if (gastat > budget) bar.classList.add('progress-bar--over');
-        else if (pct >= 80) bar.classList.add('progress-bar--warn');
-        bar.setAttribute('aria-valuenow', String(pct));
-      }
+      refs.resumBar.classList.remove('progress-bar--warn', 'progress-bar--over');
+      if (gastat > budget) refs.resumBar.classList.add('progress-bar--over');
+      else if (pct >= 80) refs.resumBar.classList.add('progress-bar--warn');
+      refs.resumBar.setAttribute('aria-valuenow', String(pct));
     }
+  }
 
+  function onAcabar() {
+    const list = data.getShoppingList();
+    renderResum(list);
     goToStep('resum');
   }
 

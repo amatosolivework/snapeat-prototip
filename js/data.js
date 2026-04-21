@@ -1114,6 +1114,13 @@ window.SnapEat.data = (function () {
     return ALTERNATIVES_DEFAULT.slice();
   }
 
+  // Reinicia el cicle de setmana: esborra el pla i la llista de compra.
+  // Preserva pressupost i preferències de l'usuari.
+  function resetWeekCycle() {
+    setWeekPlan(null);
+    setShoppingList([]);
+  }
+
   // ------------------------------
   //  API pública
   // ------------------------------
@@ -1133,6 +1140,7 @@ window.SnapEat.data = (function () {
 
     getWeekPlan: getWeekPlan,
     setWeekPlan: setWeekPlan,
+    resetWeekCycle: resetWeekCycle,
     replaceMealInPlan: replaceMealInPlan,
 
     getShoppingList: getShoppingList,
