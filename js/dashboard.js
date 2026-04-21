@@ -191,7 +191,8 @@
     ];
     const chips = chipDefs.map(function (c) {
       const st = ind[c.key] || 'bad';
-      return '<span class="chip-macro chip-macro--' + st + '" aria-label="' + shared.escapeAttr(c.label + ': ' + st) + '">' +
+      const statusText = STATUS_TEXT[c.key][st];
+      return '<span class="chip-macro chip-macro--' + st + '" aria-label="' + shared.escapeAttr(c.label + ': ' + statusText) + '">' +
         '<span class="chip-macro__initial" aria-hidden="true">' + c.initial + '</span>' +
         '<span class="chip-macro__label">' + escapeHtml(c.shortLabel) + '</span>' +
       '</span>';
