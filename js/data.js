@@ -27,8 +27,10 @@ window.SnapEat.data = (function () {
   function save(key, value) {
     try {
       localStorage.setItem(key, JSON.stringify(value));
+      return true;
     } catch (err) {
-      // localStorage ple o bloquejat — ignorem silenciosament (prototip).
+      // localStorage ple o bloquejat: retornem false perquè el caller pugui avisar.
+      return false;
     }
   }
 
@@ -80,7 +82,7 @@ window.SnapEat.data = (function () {
   function addMeal(meal) {
     const meals = getMeals();
     meals.push(meal);
-    save('snapeat:meals', meals);
+    if (!save('snapeat:meals', meals)) return null;
     return meal;
   }
 

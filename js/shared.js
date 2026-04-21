@@ -475,6 +475,36 @@ window.SnapEat.shared = (function () {
   }
 
   // ------------------------------
+  //  Compressió d'imatge
+  // ------------------------------
+
+  // Comprimeix un File d'imatge a JPEG dataURL, respectant aspect ratio.
+  // maxDim és la mida màxima (en px) per a l'eix més llarg. quality 0-1.
+  function compressImageFile(file, maxDim, quality) {
+    return new Promise(function (resolve, reject) {
+      const reader = new FileReader();
+      reader.onerror = reject;
+      reader.onload = function (ev) {
+        const img = new Image();
+        img.onerror = reject;
+        img.onload = function () {
+          const ratio = Math.min(maxDim / img.width, maxDim / img.height, 1);
+          const w = Math.round(img.width * ratio);
+          const h = Math.round(img.height * ratio);
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // ------------------------------
   //  Inicialització
   // ------------------------------
 
@@ -487,6 +517,7 @@ window.SnapEat.shared = (function () {
 
   return {
     icon: icon,
+    compressImageFile: compressImageFile,
     formatPrice: formatPrice,
     formatTime: formatTime,
     getDayName: getDayName,

@@ -85,11 +85,10 @@
       photoInput.addEventListener('change', function (e) {
         const file = e.target.files && e.target.files[0];
         if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function (ev) {
-          state.photoDataUrl = ev.target.result;
+        shared.compressImageFile(file, 1024, 0.7).then(function (dataUrl) {
+          state.photoDataUrl = dataUrl;
           if (photoPreview) {
-            photoPreview.src = state.photoDataUrl;
+            photoPreview.src = dataUrl;
             photoPreview.classList.remove('hidden');
             photoPreview.alt = 'Foto de l\'àpat';
           }
@@ -100,8 +99,9 @@
             shared.showToast('He detectat: ' + MOCK_DETECTIONS[idx], 'info');
           }
           updateCtaVisibility();
-        };
-        reader.readAsDataURL(file);
+        }).catch(function () {
+          shared.showToast('No hem pogut processar la foto, torna a provar', 'error');
+        });
       });
     }
 
@@ -168,7 +168,11 @@
           fecha: data.todayKey ? data.todayKey() : now.toISOString().slice(0, 10),
           createdAt: now.toISOString()
         };
-        data.addMeal(meal);
+        const saved = data.addMeal(meal);
+        if (!saved) {
+          shared.showToast('No hem pogut guardar. Prova d\'eliminar un àpat antic.', 'error');
+          return;
+        }
         shared.showToast('Àpat registrat', 'success');
       }
 
