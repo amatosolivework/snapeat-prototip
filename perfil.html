@@ -46,7 +46,7 @@
 
     <section class="perfil-section" aria-labelledby="prefs-title">
       <h2 id="prefs-title" class="grouped-list-heading">Preferències alimentàries</h2>
-      <ul class="grouped-list" role="group" aria-labelledby="prefs-title">
+      <ul class="grouped-list">
         <li class="grouped-list__item grouped-list__item--interactive">
           <label class="pref-row">
             <span class="grouped-list__label">Vegetarià/ana</span>
@@ -75,11 +75,12 @@
         <li class="grouped-list__item">
           <label for="default-budget" class="grouped-list__label">Quantitat setmanal</label>
           <div class="pref-budget-input">
-            <input type="number" id="default-budget" value="30" min="10" max="200">
+            <input type="number" id="default-budget" value="30" min="10" max="200" inputmode="numeric" aria-describedby="budget-unit-hint">
             <span aria-hidden="true">€</span>
           </div>
         </li>
       </ul>
+      <p id="budget-unit-hint" class="grouped-list__hint">En euros, per setmana.</p>
     </section>
 
     <section class="perfil-section" aria-labelledby="info-title">
