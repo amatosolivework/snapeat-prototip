@@ -91,7 +91,7 @@ window.SnapEat.data = (function () {
     const idx = meals.findIndex((m) => m.id === id);
     if (idx === -1) return null;
     meals[idx] = Object.assign({}, meals[idx], updates);
-    save('snapeat:meals', meals);
+    if (!save('snapeat:meals', meals)) return null;
     return meals[idx];
   }
 

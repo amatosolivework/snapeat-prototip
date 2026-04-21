@@ -147,13 +147,17 @@
       const indicadors = data.analyzeMeal(nom + ' ' + extresArr.join(' '));
 
       if (state.editId) {
-        data.updateMeal(state.editId, {
+        const saved = data.updateMeal(state.editId, {
           nom: nom,
           extras: extresArr,
           indicadors: indicadors,
           photoDataUrl: state.photoDataUrl,
           updatedAt: new Date().toISOString()
         });
+        if (!saved) {
+          shared.showToast('No hem pogut guardar. Prova d\'eliminar un àpat antic.', 'error');
+          return;
+        }
         shared.showToast('Àpat actualitzat', 'success');
       } else {
         const now = new Date();
