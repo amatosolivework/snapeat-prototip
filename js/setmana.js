@@ -382,9 +382,14 @@
         listHtml +
       '</fieldset>';
 
+    const mealButton = document.querySelector(
+      '.week-day__meal-name[data-day-index="' + dayIndex + '"][data-meal-type="' + mealType + '"]'
+    );
+
     shared.bottomSheet({
       title: 'Quin àpat et ve més bé?',
       bodyHtml: body,
+      openerEl: mealButton,
       actions: [
         { label: 'Cancel·lar', variant: 'ghost' },
         {

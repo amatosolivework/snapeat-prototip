@@ -242,7 +242,10 @@ window.SnapEat.shared = (function () {
   function bottomSheet(config) {
     const cfg = config || {};
     const titleId = 'bs-title-' + Date.now() + '-' + Math.floor(Math.random() * 10000);
-    const opener = document.activeElement;
+    const opener = (cfg.openerEl && typeof cfg.openerEl.focus === 'function')
+      ? cfg.openerEl
+      : document.activeElement;
+    let closed = false;
 
     const root = document.createElement('div');
     root.className = 'bottom-sheet';
@@ -318,6 +321,8 @@ window.SnapEat.shared = (function () {
     const focusableSelector = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
     function close() {
+      if (closed) return;
+      closed = true;
       root.classList.remove('bottom-sheet--visible');
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = '';
