@@ -90,13 +90,14 @@
           if (photoPreview) {
             photoPreview.src = dataUrl;
             photoPreview.classList.remove('hidden');
-            photoPreview.alt = 'Foto de l\'àpat';
+            photoPreview.alt = detectInput.value.trim() ? ('Foto de ' + detectInput.value.trim()) : 'Foto de l\'àpat';
           }
           // Detecció simulada: si el camp està buit, proposem un nom aleatori.
           if (!detectInput.value.trim()) {
             const idx = Math.floor(Math.random() * MOCK_DETECTIONS.length);
             detectInput.value = MOCK_DETECTIONS[idx];
             shared.showToast('He detectat: ' + MOCK_DETECTIONS[idx], 'info');
+            if (photoPreview) photoPreview.alt = 'Foto de ' + MOCK_DETECTIONS[idx];
           }
           updateCtaVisibility();
         }).catch(function () {
@@ -116,8 +117,13 @@
       });
     }
 
-    // Input del nom — actualitzem la visibilitat del CTA a cada tecla.
-    detectInput.addEventListener('input', updateCtaVisibility);
+    // Input del nom — actualitzem la visibilitat del CTA i l'alt de la foto a cada tecla.
+    detectInput.addEventListener('input', function () {
+      updateCtaVisibility();
+      if (state.photoDataUrl && photoPreview) {
+        photoPreview.alt = detectInput.value.trim() ? ('Foto de ' + detectInput.value.trim()) : 'Foto de l\'àpat';
+      }
+    });
 
     // Chips — toggle amb aria-pressed.
     if (extrasChips) {
