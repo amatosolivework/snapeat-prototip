@@ -166,10 +166,6 @@ window.SnapEat.shared = (function () {
     return new Promise(function (resolve) {
       const overlay = document.createElement('div');
       overlay.className = 'modal modal--visible';
-      overlay.setAttribute('role', 'dialog');
-      overlay.setAttribute('aria-modal', 'true');
-      overlay.setAttribute('aria-labelledby', titleId);
-      if (message) overlay.setAttribute('aria-describedby', bodyId);
 
       // Estils inline com a fallback per si la CSS no té classes coincidents.
       overlay.style.position = 'fixed';
@@ -181,8 +177,11 @@ window.SnapEat.shared = (function () {
       overlay.style.padding = '24px';
       overlay.style.zIndex = '180';
 
+      // Els atributs de diàleg van a l'element interior (patró WAI-ARIA recomanat).
+      const dialogAttrs = 'role="dialog" aria-modal="true" aria-labelledby="' + titleId + '"' +
+        (message ? ' aria-describedby="' + bodyId + '"' : '');
       overlay.innerHTML = '' +
-        '<div class="modal__dialog" role="document" style="background:#fff;border-radius:16px;padding:24px;max-width:420px;width:100%;box-shadow:0 10px 15px -3px rgba(0,0,0,0.10), 0 4px 6px -4px rgba(0,0,0,0.05);">' +
+        '<div class="modal__dialog" ' + dialogAttrs + ' style="background:#fff;border-radius:16px;padding:24px;max-width:420px;width:100%;box-shadow:0 10px 15px -3px rgba(0,0,0,0.10), 0 4px 6px -4px rgba(0,0,0,0.05);">' +
           '<h2 id="' + titleId + '" class="modal__title" style="margin:0 0 8px;font-size:20px;font-weight:700;">' + escapeHtml(title || 'Confirmar') + '</h2>' +
           (message ? '<p id="' + bodyId + '" class="modal__body" style="margin:0 0 16px;color:#4B5563;">' + escapeHtml(message) + '</p>' : '') +
           '<div class="modal__actions" style="display:flex;gap:8px;justify-content:flex-end;">' +
@@ -420,7 +419,6 @@ window.SnapEat.shared = (function () {
       e.preventDefault();
       const main = document.getElementById('main-content');
       if (main) {
-        main.setAttribute('tabindex', '-1');
         main.focus();
       }
     });

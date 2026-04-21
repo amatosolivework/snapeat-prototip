@@ -2,8 +2,8 @@
 
 > Document viu. Actualitza'l quan canvies l'estat de l'app.
 
-**Última sessió**: 2026-04-20
-**Últim commit**: `ca15875` — "Flow horitzontal setmana + àpat hero + mini-semàfor H/V/P + scroll hide CTA"
+**Última sessió**: 2026-04-21
+**Últim commit**: `7e54a0b` — "Checkpoint VoiceOver + resum de validacions al HANDOFF"
 
 ## Què funciona (verificat amb captures a `/tmp/snapeat-*.png`)
 

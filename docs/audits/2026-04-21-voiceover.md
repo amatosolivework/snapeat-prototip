@@ -81,6 +81,8 @@ Dins de la recepta, clica "Canviar aquest àpat" per obrir el swap sheet.
 - [ ] Anuncia diàleg?
 - [ ] Esc tanca → focus va al week-day__meal-name button?
 
+> **Nota sobre "Canviar" amb èxit:** Si l'usuari tria una alternativa i prem "Canviar", el pla setmanal es re-renderitza via `renderWeekPlan(newPlan)`, el qual destrueix el nodo `.week-day__meal-name` que havia obert el sheet. Quan el sheet es tanca, `opener.focus()` falla silenciosament (node detached) i el focus acaba al `<body>`. És un compromís acceptat per a P3; una solució robusta caldria re-querir el botó per selector després del render. Si VoiceOver es queda "sense lloc" després d'un swap reeixit, és aquest cas.
+
 ### E8: Confirm modal
 
 Al dashboard, elimina un àpat.
@@ -119,3 +121,7 @@ Si trobes problemes, documenta'ls en una secció "Problemes detectats" al final 
 ## Temps estimat
 
 ~30 min per a totes les validacions. Fes-ho amb la pantalla en silenci i casc — VoiceOver llegeix ràpid i en veu alta.
+
+## Limitacions conegudes
+
+- **Focus restore fallback quan l'opener es destrueix:** Als chains recipe→swap, alt→item, el "Canviar" / "Triar alternativa" re-renderitza el DOM immediatament sota el sheet. El botó d'origen desapareix abans que el sheet tanqui. `opener.focus()` falla silenciosament i el focus acaba al `<body>`. Acceptat com a compromís P3; un robustiment possible: capturar opener com a CSS selector i re-querir.
