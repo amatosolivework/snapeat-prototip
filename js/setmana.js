@@ -44,7 +44,7 @@
     resum: {
       title: 'Ben fet!',
       subtitle: 'La setmana està llesta.',
-      ctaLabel: null
+      ctaLabel: 'Planificar una setmana nova'
     }
   };
 
@@ -129,7 +129,8 @@
       pressupost: onGenerarMenu,
       menu: onGenerarLlista,
       llista: onAnarComprar,
-      compra: onAcabar
+      compra: onAcabar,
+      resum: onReiniciarCicle
     };
     refs.stickyCtaBtn.onclick = handlers[step] || null;
   }
@@ -614,6 +615,16 @@
     const list = data.getShoppingList();
     renderResum(list);
     goToStep('resum');
+  }
+
+  function onReiniciarCicle() {
+    data.resetWeekCycle();
+    if (refs.budgetInput) refs.budgetInput.value = data.getBudget();
+    // Neteja render fantasma al flow-track per no veure contingut vell quan llisquem.
+    if (refs.menuSetmanal) refs.menuSetmanal.innerHTML = '';
+    if (refs.llistaCompra) refs.llistaCompra.innerHTML = '';
+    if (refs.productesCompra) refs.productesCompra.innerHTML = '';
+    goToStep('pressupost');
   }
 
   document.addEventListener('DOMContentLoaded', init);
