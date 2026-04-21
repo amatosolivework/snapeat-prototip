@@ -105,6 +105,17 @@
       });
     }
 
+    // Foto — trigger keydown per Enter/Space (accessible).
+    const fotoTrigger = document.querySelector('.foto-area__trigger');
+    if (fotoTrigger && photoInput) {
+      fotoTrigger.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          photoInput.click();
+        }
+      });
+    }
+
     // Input del nom — actualitzem la visibilitat del CTA a cada tecla.
     detectInput.addEventListener('input', updateCtaVisibility);
 
