@@ -153,13 +153,23 @@ window.SnapEat.shared = (function () {
     const confirmLabel = options.confirmLabel || 'Confirmar';
     const cancelLabel = options.cancelLabel || 'Cancel·lar';
     const danger = !!options.danger;
+    const opener = (options.openerEl && typeof options.openerEl.focus === 'function')
+      ? options.openerEl
+      : document.activeElement;
+    let closed = false;
+
+    // IDs únics per evitar col·lisions si hi hagués múltiples instàncies al DOM.
+    const uid = Date.now() + '-' + Math.floor(Math.random() * 10000);
+    const titleId = 'confirm-title-' + uid;
+    const bodyId = 'confirm-body-' + uid;
 
     return new Promise(function (resolve) {
       const overlay = document.createElement('div');
       overlay.className = 'modal modal--visible';
       overlay.setAttribute('role', 'dialog');
       overlay.setAttribute('aria-modal', 'true');
-      overlay.setAttribute('aria-labelledby', 'confirm-title');
+      overlay.setAttribute('aria-labelledby', titleId);
+      if (message) overlay.setAttribute('aria-describedby', bodyId);
 
       // Estils inline com a fallback per si la CSS no té classes coincidents.
       overlay.style.position = 'fixed';
@@ -173,30 +183,30 @@ window.SnapEat.shared = (function () {
 
       overlay.innerHTML = '' +
         '<div class="modal__dialog" role="document" style="background:#fff;border-radius:16px;padding:24px;max-width:420px;width:100%;box-shadow:0 10px 15px -3px rgba(0,0,0,0.10), 0 4px 6px -4px rgba(0,0,0,0.05);">' +
-          '<h2 id="confirm-title" class="modal__title" style="margin:0 0 8px;font-size:20px;font-weight:700;">' + escapeHtml(title || 'Confirmar') + '</h2>' +
-          (message ? '<p class="modal__body" style="margin:0 0 16px;color:#4B5563;">' + escapeHtml(message) + '</p>' : '') +
+          '<h2 id="' + titleId + '" class="modal__title" style="margin:0 0 8px;font-size:20px;font-weight:700;">' + escapeHtml(title || 'Confirmar') + '</h2>' +
+          (message ? '<p id="' + bodyId + '" class="modal__body" style="margin:0 0 16px;color:#4B5563;">' + escapeHtml(message) + '</p>' : '') +
           '<div class="modal__actions" style="display:flex;gap:8px;justify-content:flex-end;">' +
             '<button type="button" class="btn btn--ghost" data-action="cancel">' + escapeHtml(cancelLabel) + '</button>' +
             '<button type="button" class="btn ' + (danger ? 'btn--danger' : 'btn--primary') + '" data-action="confirm">' + escapeHtml(confirmLabel) + '</button>' +
           '</div>' +
         '</div>';
 
-      const previouslyFocused = document.activeElement;
       document.body.appendChild(overlay);
       document.body.style.overflow = 'hidden';
 
       const confirmBtn = overlay.querySelector('[data-action="confirm"]');
       const cancelBtn = overlay.querySelector('[data-action="cancel"]');
       const focusable = [cancelBtn, confirmBtn];
-      confirmBtn.focus();
+      // Focus inicial al Cancel per evitar confirmacions destructives accidentals.
+      cancelBtn.focus();
 
       function close(result) {
+        if (closed) return;
+        closed = true;
         document.removeEventListener('keydown', onKey);
         document.body.style.overflow = '';
         if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
-        if (previouslyFocused && previouslyFocused.focus) {
-          try { previouslyFocused.focus(); } catch (e) { /* ignore */ }
-        }
+        try { opener.focus(); } catch (e) { /* ignore */ }
         resolve(result);
       }
 
