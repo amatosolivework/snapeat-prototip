@@ -613,6 +613,11 @@
 
   function onAcabar() {
     const list = data.getShoppingList();
+    const marcats = list.filter(function (i) { return i.comprat; }).length;
+    if (marcats === 0) {
+      shared.showToast('Marca algun producte abans d\'acabar', 'info');
+      return;
+    }
     renderResum(list);
     goToStep('resum');
   }
