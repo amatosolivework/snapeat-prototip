@@ -190,7 +190,8 @@
       { key: 'proteina', initial: 'P', label: 'Proteïna', shortLabel: 'Prot.' }
     ];
     const chips = chipDefs.map(function (c) {
-      const st = ind[c.key] || 'bad';
+      const raw = ind[c.key] || 'bad';
+      const st = (raw === 'ok' || raw === 'warn' || raw === 'bad') ? raw : 'bad';
       const statusText = STATUS_TEXT[c.key][st];
       return '<span class="chip-macro chip-macro--' + st + '" aria-label="' + shared.escapeAttr(c.label + ': ' + statusText) + '">' +
         '<span class="chip-macro__initial" aria-hidden="true">' + c.initial + '</span>' +
