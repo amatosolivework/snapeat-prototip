@@ -96,7 +96,7 @@
       if (refs.stepTitle) refs.stepTitle.textContent = meta.title;
       if (refs.stepSubtitle) refs.stepSubtitle.textContent = meta.subtitle;
     }
-    if (refs.stepBack) refs.stepBack.hidden = (idx === 0);
+    if (refs.stepBack) refs.stepBack.hidden = (idx === 0 || STEPS[idx] === 'resum');
     updateStickyCta(name);
 
     // Scroll vertical al top (el flow just ha canviat d'escena).
@@ -189,6 +189,11 @@
       shared.showToast('Indica un pressupost d\'almenys 10 €', 'error');
       refs.budgetInput.focus();
       return;
+    }
+
+    const planExistent = data.getWeekPlan();
+    if (planExistent) {
+      shared.showToast('Generant un menú nou…', 'info');
     }
 
     if (refs.stickyCtaBtn) {
