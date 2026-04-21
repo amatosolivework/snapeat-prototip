@@ -166,7 +166,6 @@
     if (savedList && savedList.length) renderShoppingList(savedList);
 
     if (isWeekCompleted(savedList)) {
-      renderModeCompra(savedList);
       renderResum(savedList);
       goToStep('resum', { skipScroll: true });
     } else if (savedList && savedList.length) {
